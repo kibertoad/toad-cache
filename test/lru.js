@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {lru} from "../dist/tiny-lru.esm.js";
+import {lru} from "../dist/toad-cache.esm.js";
 
 describe("Testing functionality", function () {
 	beforeEach(function () {

@@ -4,7 +4,7 @@ Least Recently Used cache for Client or Server.
 
 ```javascript
 import {lru} from "toad-cache";
-const cache = lru(max, ttl = 0, resetTtl = false);
+const cache = lru(max, ttl = 0);
 ```
 
 Lodash provides a `memoize` function with a cache that can be swapped out as long as it implements the right interface.
@@ -135,19 +135,6 @@ Item in "last" or "top" position
 const cache = lru();
 
 cache.last; // null - it's a new cache!
-```
-
-## resetTtl
-### Property
-
-Resets `item.expiry` with each `set()` if `true` (false)
-
-**Example**
-
-```javascript
-const cache = lru();
-
-cache.resetTtl; // false
 ```
 
 ## set

@@ -1,19 +1,40 @@
 class LRU {
-	constructor (max = 0, ttl = 0, resetTtl = false) {
+	constructor (max = 0, ttl = 0) {
 		this.first = null;
 		this.items = new Map();
 		this.last = null;
 		this.max = max;
-		this.resetTtl = resetTtl;
 		this.ttl = ttl;
+	}
+
+	bumpLru (item) {
+		const last = this.last;
+		const next = item.next;
+		const prev = item.prev;
+
+		if (this.first === item) {
+			this.first = item.next;
+		}
+
+		item.next = null;
+		item.prev = this.last;
+		last.next = item;
+
+		if (prev !== null) {
+			prev.next = next;
+		}
+
+		if (next !== null) {
+			next.prev = prev;
+		}
+
+		this.last = item;
 	}
 
 	clear () {
 		this.first = null;
 		this.items = new Map();
 		this.last = null;
-
-		return this;
 	}
 
 	delete (key) {
@@ -38,8 +59,6 @@ class LRU {
 				this.last = item.prev;
 			}
 		}
-
-		return this;
 	}
 
 	evict (bypass = false) {
@@ -56,8 +75,6 @@ class LRU {
 				this.first.prev = null;
 			}
 		}
-
-		return this;
 	}
 
 	expiresAt (key) {
@@ -71,82 +88,61 @@ class LRU {
 	}
 
 	get (key) {
-		let result;
-
 		if (this.items.has(key)) {
 			const item = this.items.get(key);
 
 			if (this.ttl > 0 && item.expiry <= Date.now()) {
 				this.delete(key);
 			} else {
-				result = item.value;
-				this.set(key, result, true);
+				this.bumpLru(item);
+
+				return item.value;
 			}
 		}
 
-		return result;
+		return undefined;
 	}
 
 	keys () {
 		return this.items.keys();
 	}
 
-	set (key, value, bypass = false, resetTtl = this.resetTtl) {
-		let item;
-
-		if (bypass || this.items.has(key)) {
-			item = this.items.get(key);
+	set (key, value) {
+		// Replace existing item
+		if (this.items.has(key)) {
+			const item = this.items.get(key);
 			item.value = value;
 
-			if (resetTtl) {
-				item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl;
-			}
+			item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl;
 
 			if (this.last !== item) {
-				const last = this.last,
-					next = item.next,
-					prev = item.prev;
+				this.bumpLru(item);
 
-				if (this.first === item) {
-					this.first = item.next;
-				}
-
-				item.next = null;
-				item.prev = this.last;
-				last.next = item;
-
-				if (prev !== null) {
-					prev.next = next;
-				}
-
-				if (next !== null) {
-					next.prev = prev;
-				}
-			}
-		} else {
-			if (this.max > 0 && this.size === this.max) {
-				this.evict(true);
-			}
-
-			item = {
-				expiry: this.ttl > 0 ? Date.now() + this.ttl : this.ttl,
-				key: key,
-				prev: this.last,
-				next: null,
-				value
-			};
-			this.items.set(key, item);
-
-			if (this.size === 1) {
-				this.first = item;
-			} else {
-				this.last.next = item;
+				return;
 			}
 		}
 
-		this.last = item;
+		// Add new item
+		if (this.max > 0 && this.size === this.max) {
+			this.evict(true);
+		}
 
-		return this;
+		const item = {
+			expiry: this.ttl > 0 ? Date.now() + this.ttl : this.ttl,
+			key: key,
+			prev: this.last,
+			next: null,
+			value
+		};
+		this.items.set(key, item);
+
+		if (this.size === 1) {
+			this.first = item;
+		} else {
+			this.last.next = item;
+		}
+
+		this.last = item;
 	}
 
 	get size () {
@@ -154,7 +150,7 @@ class LRU {
 	}
 }
 
-export function lru (max = 1000, ttl = 0, resetTtl = false) {
+export function lru (max = 1000, ttl = 0) {
 	if (isNaN(max) || max < 0) {
 		throw new TypeError("Invalid max value");
 	}
@@ -163,9 +159,5 @@ export function lru (max = 1000, ttl = 0, resetTtl = false) {
 		throw new TypeError("Invalid ttl value");
 	}
 
-	if (typeof resetTtl !== "boolean") {
-		throw new TypeError("Invalid resetTtl value");
-	}
-
-	return new LRU(max, ttl, resetTtl);
+	return new LRU(max, ttl);
 }
