@@ -16,18 +16,18 @@
     "*.d.ts"
   ],
   "license": "MIT",
-  "source": "src/lru.js",
+  "source": "index.js",
   "main": "dist/toad-cache.cjs",
   "module": "dist/toad-cache.esm.js",
   "type": "module",
   "sourceType": "module",
-  "types": "lru.d.ts",
+  "types": "toad-cache.d.ts",
   "engines": {
     "node": ">=12"
   },
   "engineStrict": true,
   "scripts": {
-    "build": "npm run lint && rm -rf dist/* && npm run rollup && npm run mocha",
+    "build": "del-cli dist && del-cli coverage && npm run rollup && npm run test:ci",
     "benchmark": "node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "eslint *.js src/*.js test/*.js",
@@ -37,28 +37,33 @@
     "test": "vitest",
     "test:coverage": "npm run rollup && npm run test -- --coverage",
     "test:ci": "npm run rollup && npm run lint && npm run test:coverage",
-    "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir ."
+    "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir .",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@vitest/coverage-c8": "0.29.8",
     "@rollup/plugin-terser": "^0.4.0",
     "auto-changelog": "^2.4.0",
-    "eslint": "^8.36.0",
+    "del-cli": "^5.0.0",
+    "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "precise": "^2.0.1",
-    "rollup": "^3.19.1",
+    "rollup": "^3.20.2",
     "vitest": "0.29.8",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.3"
   },
   "keywords": [
     "LRU",
+    "FIFO",
     "cache",
     "client",
     "server",
     "least",
     "recently",
-    "used"
+    "used",
+    "first",
+    "browser"
   ]
 }

@@ -20,38 +20,34 @@ const esmOutBase = { ...defaultOutBase, format: 'esm' }
 const umdOutBase = { ...defaultOutBase, format: 'umd' }
 const minOutBase = { banner: bannerShort, name: pkg.name, plugins: [terser()], sourcemap: true }
 
-const modules = ['lru', 'fifo']
-
-const rollupEntries = modules.map((moduleId) => {
-  return {
-    input: `./src/${moduleId}.js`,
+const rollupEntries = [{
+    input: `./index.js`,
     output: [
       {
         ...cjOutBase,
-        file: `dist/${pkg.name}-${moduleId}.cjs`,
+        file: `dist/${pkg.name}.cjs`,
       },
       {
         ...esmOutBase,
-        file: `dist/${pkg.name}-${moduleId}.esm.js`,
+        file: `dist/${pkg.name}.esm.js`,
       },
       {
         ...esmOutBase,
         ...minOutBase,
-        file: `dist/${pkg.name}-${moduleId}.esm.min.js`,
+        file: `dist/${pkg.name}.esm.min.js`,
       },
       {
         ...umdOutBase,
-        file: `dist/${pkg.name}-${moduleId}.js`,
-        name: moduleId,
+        file: `dist/${pkg.name}.js`,
+        name: 'toad-cache',
       },
       {
         ...umdOutBase,
         ...minOutBase,
-        file: `dist/${pkg.name}-${moduleId}.min.js`,
-        name: moduleId,
+        file: `dist/${pkg.name}.min.js`,
+        name: 'toad-cache',
       },
     ],
-  }
-})
+  }]
 
 export default rollupEntries
