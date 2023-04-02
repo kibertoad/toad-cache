@@ -1,21 +1,21 @@
 {
-  "name": "tiny-lru",
-  "description": "Tiny LRU cache for Client or Server",
-  "version": "10.3.0",
-  "homepage": "https://github.com/avoidwork/tiny-lru",
-  "author": "Jason Mulligan <jason.mulligan@avoidwork.com>",
+  "name": "toad-cache",
+  "description": "LRU cache for Client or Server",
+  "version": "1.0.0",
+  "homepage": "https://github.com/kibertoad/toad-cache",
+  "author": "Igor Savin <kibertoad@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/avoidwork/tiny-lru.git"
+    "url": "git://github.com/kibertoad/toad-cache.git"
   },
   "bugs": {
-    "url": "https://github.com/avoidwork/tiny-lru/issues"
+    "url": "https://github.com/kibertoad/toad-cache/issues"
   },
   "files": [
     "dist",
     "*.d.ts"
   ],
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "source": "src/lru.js",
   "main": "dist/tiny-lru.cjs",
   "module": "dist/tiny-lru.esm.js",
@@ -48,7 +48,6 @@
   "keywords": [
     "LRU",
     "cache",
-    "tiny",
     "client",
     "server",
     "least",

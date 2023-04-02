@@ -1,9 +1,9 @@
-# Tiny LRU
+# Toad Cache
 
 Least Recently Used cache for Client or Server.
 
 ```javascript
-import {lru} from "tiny-lru";
+import {lru} from "toad-cache";
 const cache = lru(max, ttl = 0, resetTtl = false);
 ```
 
@@ -192,5 +192,8 @@ cache.ttl = 3e4;
 ```
 
 ## License
-Copyright (c) 2023 Jason Mulligan
-Licensed under the BSD-3 license.
+Copyright (c) 2023 Igor Savin
+
+Based on [tiny-lru](https://github.com/avoidwork/tiny-lru), created by Jason Mulligan
+
+Licensed under the MIT license.

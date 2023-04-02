@@ -106,3 +106,4 @@ dist
 /.idea/modules.xml
 /.idea/toad-cache.iml
 /.idea/vcs.xml
+/package-lock.json
