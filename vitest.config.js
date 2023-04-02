@@ -7,13 +7,13 @@ export default defineConfig({
     environment: 'node',
     reporters: ['verbose'],
     coverage: {
-      include: ['src/**/*.js'],
+      include: ['src/*.js'],
       reporter: ['text', 'json', 'html'],
       all: true,
-      lines: 50,
-      functions: 50,
-      branches: 40,
-      statements: 50,
+      statements: 80,
+      branches: 65,
+      functions: 80,
+      lines: 80,
     },
   },
 })

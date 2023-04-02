@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { it, describe, beforeEach } from 'vitest'
-import { lru } from '../dist/toad-cache.esm.js'
+import { lru } from '../src/lru.js'
 
 describe('Testing functionality', function () {
   let cache

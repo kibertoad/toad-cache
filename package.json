@@ -33,9 +33,10 @@
     "lint": "eslint *.js src/*.js test/*.js",
     "lint:fix": "eslint --fix *.js src/*.js test/*.js",
     "format": "prettier --write \"{src,test}/**/*.js\" benchmark.js ",
-    "vitest": "vitest",
     "rollup": "rollup --config",
-    "test": "npm run rollup && npm run lint && npm run vitest",
+    "test": "vitest",
+    "test:coverage": "npm run rollup && npm run test -- --coverage",
+    "test:ci": "npm run rollup && npm run lint && npm run test:coverage",
     "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir ."
   },
   "devDependencies": {
