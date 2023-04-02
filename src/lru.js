@@ -7,6 +7,10 @@ class LRU {
     this.ttl = ttl
   }
 
+  get size() {
+    return this.items.size
+  }
+
   bumpLru(item) {
     const last = this.last
     const next = item.next
@@ -32,8 +36,8 @@ class LRU {
   }
 
   clear() {
-    this.first = null
     this.items = new Map()
+    this.first = null
     this.last = null
   }
 
@@ -78,29 +82,25 @@ class LRU {
   }
 
   expiresAt(key) {
-    let result
-
     if (this.items.has(key)) {
-      result = this.items.get(key).expiry
+      return this.items.get(key).expiry
     }
-
-    return result
   }
 
   get(key) {
     if (this.items.has(key)) {
       const item = this.items.get(key)
 
+      // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
-      } else {
-        this.bumpLru(item)
-
-        return item.value
+        return
       }
-    }
 
-    return undefined
+      // Item is still fresh
+      this.bumpLru(item)
+      return item.value
+    }
   }
 
   keys() {
@@ -142,10 +142,6 @@ class LRU {
     }
 
     this.last = item
-  }
-
-  get size() {
-    return this.items.size
   }
 }
 

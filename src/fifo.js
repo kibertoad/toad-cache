@@ -7,32 +7,36 @@ class FIFO {
     this.ttl = ttl
   }
 
+  get size() {
+    return this.items.size
+  }
+
   clear() {
-    this.first = null
     this.items = new Map()
+    this.first = null
     this.last = null
   }
 
   delete(key) {
     if (this.items.has(key)) {
-      const item = this.items.get(key)
+      const deletedItem = this.items.get(key)
 
       this.items.delete(key)
 
-      if (item.prev !== null) {
-        item.prev.next = item.next
+      if (deletedItem.prev !== null) {
+        deletedItem.prev.next = deletedItem.next
       }
 
-      if (item.next !== null) {
-        item.next.prev = item.prev
+      if (deletedItem.next !== null) {
+        deletedItem.next.prev = deletedItem.prev
       }
 
-      if (this.first === item) {
-        this.first = item.next
+      if (this.first === deletedItem) {
+        this.first = deletedItem.next
       }
 
-      if (this.last === item) {
-        this.last = item.prev
+      if (this.last === deletedItem) {
+        this.last = deletedItem.prev
       }
     }
   }
@@ -54,13 +58,9 @@ class FIFO {
   }
 
   expiresAt(key) {
-    let result
-
     if (this.items.has(key)) {
-      result = this.items.get(key).expiry
+      return this.items.get(key).expiry
     }
-
-    return result
   }
 
   get(key) {
@@ -69,12 +69,11 @@ class FIFO {
 
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
-      } else {
-        return item.value
+        return
       }
-    }
 
-    return undefined
+      return item.value
+    }
   }
 
   keys() {
@@ -113,10 +112,6 @@ class FIFO {
     }
 
     this.last = item
-  }
-
-  get size() {
-    return this.items.size
   }
 }
 
