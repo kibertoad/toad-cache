@@ -2,6 +2,7 @@ import assert from 'node:assert'
 import { it, describe, beforeEach, expect } from 'vitest'
 import { lru } from '../src/lru.js'
 import { items, populateCache } from './utils/cachePopulator.js'
+import { setTimeout } from 'timers/promises'
 
 describe('LRU', function () {
   let cache
@@ -49,6 +50,27 @@ describe('LRU', function () {
       expect(Array.from(cache.keys())).toHaveLength(0)
       expect(cache.last).toBeNull()
       expect(cache.first).toBeNull()
+    })
+  })
+
+  describe('get', () => {
+    it('deletes expired entries', async () => {
+      cache = lru(4, 500)
+      populateCache(cache)
+      await setTimeout(300)
+      cache.set(items[2], items[2])
+      const item1Pre = cache.get(items[1])
+      const item2Pre = cache.get(items[2])
+
+      await setTimeout(300)
+
+      const item1Post = cache.get(items[1])
+      const item2Post = cache.get(items[2])
+
+      expect(item1Pre).toBe(false)
+      expect(item1Post).toBeUndefined()
+      expect(item2Pre).toBe(items[2])
+      expect(item2Post).toBe(items[2])
     })
   })
 
@@ -136,45 +158,26 @@ describe('LRU', function () {
       assert.strictEqual(cache.size, 0, "Should be 'null'")
     })
 
-    it('It should expose expiration time', function () {
+    it('It should expose expiration time', () => {
       cache = lru(1, 6e4)
       cache.set(items[0], false)
       assert.strictEqual(typeof cache.expiresAt(items[0]), 'number', 'Should be a number')
       assert.strictEqual(cache.expiresAt('invalid'), undefined, 'Should be undefined')
     })
 
-    it('It should reset the TTL with optional parameter', () =>
-      new Promise((done) => {
-        cache = lru(1, 6e4)
-        cache.set(items[0], false)
-        const n1 = cache.expiresAt(items[0])
-        assert.strictEqual(typeof n1, 'number', 'Should be a number')
-        assert.strictEqual(n1 > 0, true, 'Should be greater than zero')
-        setTimeout(() => {
-          cache.set(items[0], false, false, true)
-          const n2 = cache.expiresAt(items[0])
-          assert.strictEqual(typeof n2, 'number', 'Should be a number')
-          assert.strictEqual(n2 > 0, true, 'Should be greater than zero')
-          assert.strictEqual(n2 > n1, true, 'Should be greater than first expiration timestamp')
-          done()
-        }, 11)
-      }))
+    it('It should reset the TTL after resetting value', async () => {
+      cache = lru(1, 100)
+      cache.set(items[0], false)
+      const n1 = cache.expiresAt(items[0])
+      assert.strictEqual(typeof n1, 'number', 'Should be a number')
+      assert.strictEqual(n1 > 0, true, 'Should be greater than zero')
+      await setTimeout(50)
 
-    it('It should reset the TTL with optional property', () =>
-      new Promise((done) => {
-        cache = lru(1, 6e4, true)
-        cache.set(items[0], false)
-        const n1 = cache.expiresAt(items[0])
-        assert.strictEqual(typeof n1, 'number', 'Should be a number')
-        assert.strictEqual(n1 > 0, true, 'Should be greater than zero')
-        setTimeout(() => {
-          cache.set(items[0], false)
-          const n2 = cache.expiresAt(items[0])
-          assert.strictEqual(typeof n2, 'number', 'Should be a number')
-          assert.strictEqual(n2 > 0, true, 'Should be greater than zero')
-          assert.strictEqual(n2 > n1, true, 'Should be greater than first expiration timestamp')
-          done()
-        }, 11)
-      }))
+      cache.set(items[0], false)
+      const n2 = cache.expiresAt(items[0])
+      assert.strictEqual(typeof n2, 'number', 'Should be a number')
+      assert.strictEqual(n2 > 0, true, 'Should be greater than zero')
+      assert.strictEqual(n2 > n1, true, 'Should be greater than first expiration timestamp')
+    })
   })
 })

@@ -149,14 +149,14 @@ class LRU {
   }
 }
 
-export function lru(max = 1000, ttl = 0) {
+export function lru(max = 1000, ttlInMsecs = 0) {
   if (isNaN(max) || max < 0) {
     throw new TypeError('Invalid max value')
   }
 
-  if (isNaN(ttl) || ttl < 0) {
+  if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
     throw new TypeError('Invalid ttl value')
   }
 
-  return new LRU(max, ttl)
+  return new LRU(max, ttlInMsecs)
 }
