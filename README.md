@@ -1,9 +1,14 @@
 # Toad Cache
 
-Least Recently Used cache for Client or Server.
+![](https://github.com/kibertoad/toad-cache/workflows/ci/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/kibertoad/toad-cache/badge.svg?branch=main)](https://coveralls.io/r/kibertoad/toad-cache?branch=main)
+
+Least-Recently-Used and First-In-First-Out caches for Client or Server.
+
+## Getting started
 
 ```javascript
-import {lru} from "toad-cache";
+import { lru } from "toad-cache";
 const cache = lru(max, ttl = 0);
 ```
 
@@ -11,8 +16,9 @@ Lodash provides a `memoize` function with a cache that can be swapped out as lon
 See the [lodash docs](https://lodash.com/docs#memoize) for more on `memoize`.
 
 #### Example
+
 ```javascript
-_.memoize.Cache = lru().constructor;
+_.memoize.Cache = fifo().constructor;
 const memoized = _.memoize(myFunc);
 memoized.cache.max = 10;
 ```
@@ -79,7 +85,7 @@ Item in "first" or "bottom" position
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = fifo();
 
 cache.first; // null - it's a new cache!
 ```
@@ -119,7 +125,7 @@ Max items to hold in cache (1000)
 **Example**
 
 ```javascript
-const cache = lru(500);
+const cache = fifo(500);
 
 cache.max; // 500
 ```
@@ -132,7 +138,7 @@ Item in "last" or "top" position
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = fifo();
 
 cache.last; // null - it's a new cache!
 ```
@@ -160,7 +166,7 @@ Number of items in cache
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = fifo();
 
 cache.size; // 0 - it's a new cache!
 ```
@@ -173,7 +179,7 @@ Milliseconds an item will remain in cache; lazy expiration upon next `get()` of 
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = fifo();
 
 cache.ttl = 3e4;
 ```
