@@ -17,8 +17,8 @@
   ],
   "license": "MIT",
   "source": "src/lru.js",
-  "main": "dist/tiny-lru.cjs",
-  "module": "dist/tiny-lru.esm.js",
+  "main": "dist/toad-cache.cjs",
+  "module": "dist/toad-cache.esm.js",
   "type": "module",
   "sourceType": "module",
   "types": "lru.d.ts",
@@ -31,9 +31,10 @@
     "benchmark": "node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "eslint *.js src/*.js test/*.js",
+    "lint:fix": "eslint --fix *.js src/*.js test/*.js",
     "mocha": "mocha test/*.js",
     "rollup": "rollup --config",
-    "test": "npm run lint && npm run mocha",
+    "test": "npm run rollup && npm run lint && npm run mocha",
     "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir ."
   },
   "devDependencies": {
