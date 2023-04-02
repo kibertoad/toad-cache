@@ -37,8 +37,8 @@ class FIFO {
     }
   }
 
-  evict(bypass = false) {
-    if (bypass || this.size > 0) {
+  evict() {
+    if (this.size > 0) {
       const item = this.first
 
       this.items.delete(item.key)
@@ -94,7 +94,7 @@ class FIFO {
 
     // Add new item
     if (this.max > 0 && this.size === this.max) {
-      this.evict(true)
+      this.evict()
     }
 
     const item = {
