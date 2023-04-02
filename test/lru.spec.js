@@ -12,6 +12,16 @@ describe('LRU', function () {
     populateCache(cache)
   })
 
+  describe('constructor validations', () => {
+    it('throws on invalid max', () => {
+      expect(() => lru('abc')).to.throw(/Invalid max value/)
+    })
+
+    it('throws on invalid ttl', () => {
+      expect(() => lru(100, 'abc')).to.throw(/Invalid ttl value/)
+    })
+  })
+
   describe('clear', () => {
     it('Clear whole cache', () => {
       expect(Array.from(cache.keys())).toHaveLength(4)
@@ -74,11 +84,22 @@ describe('LRU', function () {
     })
   })
 
-  describe('core', () => {
+  describe('set', () => {
+    it('Does not set expiration time on resetting entry when ttl is 0', () => {
+      cache = lru(1000, 0)
+
+      cache.set(items[0], false)
+      cache.set(items[0], items[0])
+
+      expect(cache.expiresAt(items[0])).toBe(0)
+    })
+  })
+
+  describe('delete', () => {
     it('It should delete', function () {
-      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.size, 4, "Should be '4'")
+      expect(cache.first.key).toBe('b')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(4)
       assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
       assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
@@ -111,6 +132,20 @@ describe('LRU', function () {
       assert.strictEqual(cache.size, 2, "Should be '2'")
     })
 
+    it('Adjusts first item after it is deleted', () => {
+      expect(cache.first.key).toBe('b')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(4)
+
+      cache.delete(cache.first.key)
+
+      expect(cache.first.key).toBe('c')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(3)
+    })
+  })
+
+  describe('core', () => {
     it('It should handle a small evict', function () {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")

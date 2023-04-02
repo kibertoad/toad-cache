@@ -120,7 +120,7 @@ class FIFO {
   }
 }
 
-export function lru(max = 1000, ttl = 0) {
+export function fifo(max = 1000, ttl = 0) {
   if (isNaN(max) || max < 0) {
     throw new TypeError('Invalid max value')
   }

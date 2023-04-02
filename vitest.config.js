@@ -10,10 +10,10 @@ export default defineConfig({
       include: ['src/*.js'],
       reporter: ['text', 'json', 'html'],
       all: true,
-      statements: 95,
-      branches: 90,
+      statements: 100,
+      branches: 100,
       functions: 100,
-      lines: 95,
+      lines: 100,
     },
   },
 })
