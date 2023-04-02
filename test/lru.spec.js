@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import { it, describe, beforeEach, expect } from 'vitest'
 import { lru } from '../src/lru.js'
-import {items, populateCache} from "./utils/cachePopulator.js";
+import { items, populateCache } from './utils/cachePopulator.js'
 
 describe('LRU', function () {
   let cache
