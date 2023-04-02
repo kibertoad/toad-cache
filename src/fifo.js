@@ -1,34 +1,10 @@
-class LRU {
+class FIFO {
   constructor(max = 0, ttl = 0) {
     this.first = null
     this.items = new Map()
     this.last = null
     this.max = max
     this.ttl = ttl
-  }
-
-  bumpLru(item) {
-    const last = this.last
-    const next = item.next
-    const prev = item.prev
-
-    if (this.first === item) {
-      this.first = item.next
-    }
-
-    item.next = null
-    item.prev = this.last
-    last.next = item
-
-    if (prev !== null) {
-      prev.next = next
-    }
-
-    if (next !== null) {
-      next.prev = prev
-    }
-
-    this.last = item
   }
 
   clear() {
@@ -94,8 +70,6 @@ class LRU {
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
       } else {
-        this.bumpLru(item)
-
         return item.value
       }
     }
@@ -115,9 +89,6 @@ class LRU {
 
       item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
 
-      if (this.last !== item) {
-        this.bumpLru(item)
-      }
       return
     }
 
@@ -158,5 +129,5 @@ export function lru(max = 1000, ttl = 0) {
     throw new TypeError('Invalid ttl value')
   }
 
-  return new LRU(max, ttl)
+  return new FIFO(max, ttl)
 }

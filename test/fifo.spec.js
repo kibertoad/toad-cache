@@ -1,8 +1,8 @@
 import assert from 'node:assert'
 import { it, describe, beforeEach } from 'vitest'
-import { lru } from '../src/lru.js'
+import { lru } from '../src/fifo.js'
 
-describe('LRU', function () {
+describe('FIFO', function () {
   let cache
   let items
 
@@ -48,11 +48,11 @@ describe('LRU', function () {
     assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
     assert.strictEqual(cache.size, 2, "Should be '2'")
     cache.get('b')
-    assert.strictEqual(cache.first.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
     assert.strictEqual(cache.first.prev, null, "Should be 'null'")
-    assert.strictEqual(cache.first.next.key, 'b', "Should be 'b'")
-    assert.strictEqual(cache.last.key, 'b', "Should be 'b'")
-    assert.strictEqual(cache.last.prev.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.first.next.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.last.prev.key, 'b', "Should be 'b'")
     assert.strictEqual(cache.last.next, null, "Should be 'null'")
     assert.strictEqual(cache.size, 2, "Should be '2'")
   })
@@ -85,11 +85,11 @@ describe('LRU', function () {
     assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
     assert.strictEqual(cache.size, 2, "Should be '2'")
     cache.get('b')
-    assert.strictEqual(cache.first.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
     assert.strictEqual(cache.first.prev, null, "Should be 'null'")
-    assert.strictEqual(cache.first.next.key, 'b', "Should be 'b'")
-    assert.strictEqual(cache.last.key, 'b', "Should be 'b'")
-    assert.strictEqual(cache.last.prev.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.first.next.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
+    assert.strictEqual(cache.last.prev.key, 'b', "Should be 'b'")
     assert.strictEqual(cache.last.next, null, "Should be 'null'")
     assert.strictEqual(cache.size, 2, "Should be '2'")
   })
