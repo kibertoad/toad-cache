@@ -16,4 +16,6 @@ export interface ToadCache<T> {
     keys(): string[];
     set(key: any, value: T): void;
 }
-export { };
+
+export interface LRU<T> extends ToadCache<T> {}
+export interface FIFO<T> extends ToadCache<T> {}

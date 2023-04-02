@@ -27,7 +27,7 @@
   },
   "engineStrict": true,
   "scripts": {
-    "build": "del-cli dist && del-cli coverage && npm run rollup && npm run test:ci",
+    "build": "del-cli dist && del-cli coverage && npm run test:ci",
     "benchmark": "node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "eslint *.js src/*.js test/*.js",
