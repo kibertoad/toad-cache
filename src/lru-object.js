@@ -3,13 +3,9 @@ class LRU {
     this.first = null
     this.items = Object.create(null)
     this.last = null
+    this.size = 0
     this.max = max
     this.ttl = ttl
-  }
-
-  get size() {
-    // ToDo compare with explicit counter
-    return Object.keys(this.items).length
   }
 
   bumpLru(item) {
@@ -40,6 +36,7 @@ class LRU {
     this.items = Object.create(null)
     this.first = null
     this.last = null
+    this.size = 0
   }
 
   delete(key) {
@@ -47,6 +44,7 @@ class LRU {
       const item = this.items[key]
 
       delete this.items[key]
+      this.size--
 
       if (item.prev !== null) {
         item.prev.next = item.next
@@ -72,7 +70,7 @@ class LRU {
 
       delete this.items[item.key]
 
-      if (this.size === 0) {
+      if (--this.size === 0) {
         this.first = null
         this.last = null
       } else {
@@ -136,7 +134,7 @@ class LRU {
     }
     this.items[key] = item
 
-    if (this.size === 1) {
+    if (++this.size === 1) {
       this.first = item
     } else {
       this.last.next = item
