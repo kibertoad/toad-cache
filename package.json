@@ -17,8 +17,11 @@
   ],
   "license": "MIT",
   "source": "index.js",
-  "main": "dist/toad-cache.cjs",
-  "module": "dist/toad-cache.esm.js",
+  "main": "dist/toad-cache",
+  "exports": {
+    "import": "./dist/toad-cache.js",
+    "require": "./dist/toad-cache.cjs"
+  },
   "type": "module",
   "sourceType": "module",
   "types": "toad-cache.d.ts",
