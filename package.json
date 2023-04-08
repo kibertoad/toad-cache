@@ -39,7 +39,7 @@
     "rollup": "rollup --config",
     "test": "vitest",
     "test:coverage": "npm run rollup && npm run test -- --coverage",
-    "test:ci": "npm run rollup && npm run lint && npm run test:coverage",
+    "test:ci": "npm run lint && npm run test:coverage",
     "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir .",
     "prepublishOnly": "npm run build"
   },
