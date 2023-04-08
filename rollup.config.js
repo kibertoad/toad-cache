@@ -23,7 +23,7 @@ const minOutBase = {banner: bannerShort, name: pkg.name, plugins: [terser()], so
 
 export default [
   {
-    input: "./src/lru.js",
+    input: "./index.js",
     output: [
       {
         ...cjOutBase,
