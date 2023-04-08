@@ -3,6 +3,9 @@ export function lruObject<T = any>(max?: number, ttl?: number): ToadCache<T>;
 export function lru<T = any>(max?: number, ttl?: number): ToadCache<T>;
 
 export function fifo<T = any>(max?: number, ttl?: number): ToadCache<T>;
+
+export function fifoObject<T = any>(max?: number, ttl?: number): ToadCache<T>;
+
 export interface ToadCache<T> {
     first: T | null;
     last: T | null;
