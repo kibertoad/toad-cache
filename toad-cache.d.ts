@@ -1,3 +1,5 @@
+export function lruObject<T = any>(max?: number, ttl?: number): ToadCache<T>;
+
 export function lru<T = any>(max?: number, ttl?: number): ToadCache<T>;
 
 export function fifo<T = any>(max?: number, ttl?: number): ToadCache<T>;
