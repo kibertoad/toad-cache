@@ -1,4 +1,4 @@
-class LRUObject {
+class FIFOObject {
   constructor(max = 0, ttl = 0) {
     this.first = null
     this.items = Object.create(null)
@@ -6,30 +6,6 @@ class LRUObject {
     this.size = 0
     this.max = max
     this.ttl = ttl
-  }
-
-  bumpLru(item) {
-    const last = this.last
-    const next = item.next
-    const prev = item.prev
-
-    if (this.first === item) {
-      this.first = item.next
-    }
-
-    item.next = null
-    item.prev = this.last
-    last.next = item
-
-    if (prev !== null) {
-      prev.next = next
-    }
-
-    if (next !== null) {
-      next.prev = prev
-    }
-
-    this.last = item
   }
 
   clear() {
@@ -41,25 +17,25 @@ class LRUObject {
 
   delete(key) {
     if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
+      const deletedItem = this.items[key]
 
       delete this.items[key]
       this.size--
 
-      if (item.prev !== null) {
-        item.prev.next = item.next
+      if (deletedItem.prev !== null) {
+        deletedItem.prev.next = deletedItem.next
       }
 
-      if (item.next !== null) {
-        item.next.prev = item.prev
+      if (deletedItem.next !== null) {
+        deletedItem.next.prev = deletedItem.prev
       }
 
-      if (this.first === item) {
-        this.first = item.next
+      if (this.first === deletedItem) {
+        this.first = deletedItem.next
       }
 
-      if (this.last === item) {
-        this.last = item.prev
+      if (this.last === deletedItem) {
+        this.last = deletedItem.prev
       }
     }
   }
@@ -90,14 +66,11 @@ class LRUObject {
     if (Object.prototype.hasOwnProperty.call(this.items, key)) {
       const item = this.items[key]
 
-      // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
         return
       }
 
-      // Item is still fresh
-      this.bumpLru(item)
       return item.value
     }
   }
@@ -114,9 +87,6 @@ class LRUObject {
 
       item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
 
-      if (this.last !== item) {
-        this.bumpLru(item)
-      }
       return
     }
 
@@ -144,14 +114,14 @@ class LRUObject {
   }
 }
 
-export function lruObject(max = 1000, ttlInMsecs = 0) {
+export function fifoObject(max = 1000, ttl = 0) {
   if (isNaN(max) || max < 0) {
     throw new TypeError('Invalid max value')
   }
 
-  if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
+  if (isNaN(ttl) || ttl < 0) {
     throw new TypeError('Invalid ttl value')
   }
 
-  return new LRUObject(max, ttlInMsecs)
+  return new FIFOObject(max, ttl)
 }
