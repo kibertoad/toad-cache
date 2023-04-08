@@ -1,7 +1,7 @@
 {
   "name": "toad-cache",
   "description": "LRU cache for Client or Server",
-  "version": "1.1.0-next1",
+  "version": "1.1.0",
   "homepage": "https://github.com/kibertoad/toad-cache",
   "author": "Igor Savin <kibertoad@gmail.com>",
   "repository": {
@@ -45,14 +45,14 @@
     "@rollup/plugin-terser": "^0.4.0",
     "auto-changelog": "^2.4.0",
     "del-cli": "^5.0.0",
-    "eslint": "^8.37.0",
+    "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "precise": "^2.0.1",
     "rollup": "^3.20.2",
     "vitest": "0.29.8",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "keywords": [
     "LRU",
