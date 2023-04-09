@@ -1,3 +1,5 @@
+export type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number) => T
+
 export interface ToadCache<T> {
     first: any;
     last: any;
@@ -31,7 +33,7 @@ export class FifoMap<T> implements ToadCache<T>{
 }
 
 export class FifoObject<T> implements ToadCache<T> {
-    constructor(max?: number, ttl?: number);
+    constructor(max?: number, ttlInMsecs?: number);
     first: any;
     items: any;
     last: any;
