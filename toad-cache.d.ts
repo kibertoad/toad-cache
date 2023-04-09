@@ -1,26 +1,86 @@
-export function lruObject<T = any>(max?: number, ttl?: number): ToadCache<T>;
-
-export function lru<T = any>(max?: number, ttl?: number): ToadCache<T>;
-
-export function fifo<T = any>(max?: number, ttl?: number): ToadCache<T>;
-
-export function fifoObject<T = any>(max?: number, ttl?: number): ToadCache<T>;
-
 export interface ToadCache<T> {
-    first: T | null;
-    last: T | null;
+    first: any;
+    last: any;
     max: number;
-    size: number;
     ttl: number;
-
+    size: number;
     clear(): void;
     delete(key: any): void;
     evict(): void;
-    expiresAt(key: any): number | undefined;
+    expiresAt(key: any): any;
+    keys(): any;
+    get(key: any): T | undefined;
+    set(key: any, value: T): void;
+}
+
+export class FifoMap<T> implements ToadCache<T>{
+    constructor(max?: number, ttlInMsecs?: number);
+    first: any;
+    items: Map<any, any>;
+    last: any;
+    max: number;
+    ttl: number;
+    size: number;
+    clear(): void;
+    delete(key: any): void;
+    evict(): void;
+    expiresAt(key: any): any;
+    get(key: any): T | undefined;
+    keys(): IterableIterator<any>;
+    set(key: any, value: T): void;
+}
+
+export class FifoObject<T> implements ToadCache<T> {
+    constructor(max?: number, ttl?: number);
+    first: any;
+    items: any;
+    last: any;
+    size: number;
+    max: number;
+    ttl: number;
+    clear(): void;
+    delete(key: any): void;
+    evict(): void;
+    expiresAt(key: any): any;
     get(key: any): T | undefined;
     keys(): string[];
     set(key: any, value: T): void;
 }
 
-export interface LRU<T> extends ToadCache<T> {}
-export interface FIFO<T> extends ToadCache<T> {}
+export class LruMap<T> implements ToadCache<T> {
+    constructor(max?: number, ttlInMsecs?: number);
+    first: any;
+    items: Map<any, any>;
+    last: any;
+    max: number;
+    ttl: number;
+    size: number;
+    clear(): void;
+    delete(key: any): void;
+    evict(): void;
+    expiresAt(key: any): any;
+    get(key: any): T | undefined;
+    keys(): IterableIterator<any>;
+    set(key: any, value: T): void;
+}
+
+export class LruObject<T> implements ToadCache<T> {
+    constructor(max?: number, ttlInMsecs?: number);
+    first: any;
+    items: any;
+    last: any;
+    size: number;
+    max: number;
+    ttl: number;
+
+    clear(): void;
+    delete(key: any): void;
+    evict(): void;
+    expiresAt(key: any): any;
+    get(key: any): T | undefined;
+    keys(): string[];
+    set(key: any, value: T): void;
+}
+
+export { FifoObject as Fifo }
+export { LruObject as Lru }

@@ -1,11 +1,19 @@
-class LRUObject {
-  constructor(max = 0, ttl = 0) {
+export class LruObject {
+  constructor(max = 1000, ttlInMsecs = 0) {
+    if (isNaN(max) || max < 0) {
+      throw new Error('Invalid max value')
+    }
+
+    if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
+      throw new Error('Invalid ttl value')
+    }
+
     this.first = null
     this.items = Object.create(null)
     this.last = null
     this.size = 0
     this.max = max
-    this.ttl = ttl
+    this.ttl = ttlInMsecs
   }
 
   bumpLru(item) {
@@ -142,16 +150,4 @@ class LRUObject {
 
     this.last = item
   }
-}
-
-export function lruObject(max = 1000, ttlInMsecs = 0) {
-  if (isNaN(max) || max < 0) {
-    throw new TypeError('Invalid max value')
-  }
-
-  if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
-    throw new TypeError('Invalid ttl value')
-  }
-
-  return new LRUObject(max, ttlInMsecs)
 }

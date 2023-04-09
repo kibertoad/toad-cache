@@ -1,10 +1,18 @@
-class LRU {
-  constructor(max = 0, ttl = 0) {
+export class LruMap {
+  constructor(max = 1000, ttlInMsecs = 0) {
+    if (isNaN(max) || max < 0) {
+      throw new Error('Invalid max value')
+    }
+
+    if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
+      throw new Error('Invalid ttl value')
+    }
+
     this.first = null
     this.items = new Map()
     this.last = null
     this.max = max
-    this.ttl = ttl
+    this.ttl = ttlInMsecs
   }
 
   get size() {
@@ -143,16 +151,4 @@ class LRU {
 
     this.last = item
   }
-}
-
-export function lru(max = 1000, ttlInMsecs = 0) {
-  if (isNaN(max) || max < 0) {
-    throw new TypeError('Invalid max value')
-  }
-
-  if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
-    throw new TypeError('Invalid ttl value')
-  }
-
-  return new LRU(max, ttlInMsecs)
 }
