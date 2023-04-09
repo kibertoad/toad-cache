@@ -8,8 +8,9 @@ Least-Recently-Used and First-In-First-Out caches for Client or Server.
 ## Getting started
 
 ```javascript
-import { lru } from "toad-cache";
-const cache = lru(max, ttl = 0);
+import { lru, fifo } from "toad-cache";
+const LruCache = lru(max, ttl = 0);
+const FifoCache = fifo(max, ttl = 0);
 ```
 
 ## clear

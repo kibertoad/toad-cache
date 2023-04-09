@@ -1,24 +1,24 @@
 import assert from 'node:assert'
 import { it, describe, beforeEach, expect } from 'vitest'
-import { lru } from '../src/lru.js'
+import { LruObject } from '../src/LruObject.js'
 import { items, populateCache } from './utils/cachePopulator.js'
 import { setTimeout } from 'timers/promises'
 
-describe('LRU', function () {
+describe('LruObject', function () {
   let cache
 
   beforeEach(function () {
-    cache = lru(4)
+    cache = new LruObject(4)
     populateCache(cache)
   })
 
   describe('constructor validations', () => {
     it('throws on invalid max', () => {
-      expect(() => lru('abc')).to.throw(/Invalid max value/)
+      expect(() => new LruObject('abc')).to.throw(/Invalid max value/)
     })
 
     it('throws on invalid ttl', () => {
-      expect(() => lru(100, 'abc')).to.throw(/Invalid ttl value/)
+      expect(() => new LruObject(100, 'abc')).to.throw(/Invalid ttl value/)
     })
   })
 
@@ -50,7 +50,7 @@ describe('LRU', function () {
     })
 
     it('adjusts links to null when evicting last entry', () => {
-      cache = lru(4)
+      cache = new LruObject(4)
       cache.set(items[0], items[0])
       expect(Array.from(cache.keys())).toHaveLength(1)
       expect(cache.last.value).toBe(items[0])
@@ -65,7 +65,7 @@ describe('LRU', function () {
 
   describe('get', () => {
     it('deletes expired entries', async () => {
-      cache = lru(4, 500)
+      cache = new LruObject(4, 500)
       populateCache(cache)
       await setTimeout(300)
       cache.set(items[2], items[2])
@@ -86,7 +86,7 @@ describe('LRU', function () {
 
   describe('set', () => {
     it('Does not set expiration time on resetting entry when ttl is 0', () => {
-      cache = lru(1000, 0)
+      cache = new LruObject(1000, 0)
 
       cache.set(items[0], false)
       cache.set(items[0], items[0])
@@ -100,24 +100,24 @@ describe('LRU', function () {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(4)
-      assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
-      assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.items.get('d').prev.key, 'c', "Should be 'c'")
-      assert.strictEqual(cache.items.get('c').next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('c').prev.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.items.get('b').next.key, 'c', "Should be 'c'")
-      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].next, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].prev.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['d'].next.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.items['d'].prev.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items['c'].next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['c'].prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items['b'].next.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items['b'].prev, null, "Should be 'null'")
       cache.delete('c')
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 3, "Should be '3'")
-      assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
-      assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.items.get('d').prev.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.items.get('b').next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].next, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].prev.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['d'].next.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.items['d'].prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items['b'].next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['b'].prev, null, "Should be 'null'")
       cache.delete('e')
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
@@ -150,24 +150,24 @@ describe('LRU', function () {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 4, "Should be '4'")
-      assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
-      assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.items.get('d').prev.key, 'c', "Should be 'c'")
-      assert.strictEqual(cache.items.get('c').next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('c').prev.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.items.get('b').next.key, 'c', "Should be 'c'")
-      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].next, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].prev.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['d'].next.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.items['d'].prev.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items['c'].next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['c'].prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items['b'].next.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items['b'].prev, null, "Should be 'null'")
       cache.delete('c')
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 3, "Should be '3'")
-      assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
-      assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.items.get('d').prev.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.items.get('b').next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].next, null, "Should be 'null'")
+      assert.strictEqual(cache.items['e'].prev.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['d'].next.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.items['d'].prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items['b'].next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items['b'].prev, null, "Should be 'null'")
       cache.delete('e')
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
@@ -183,7 +183,7 @@ describe('LRU', function () {
     })
 
     it('It should handle an empty evict', function () {
-      cache = lru(1)
+      cache = new LruObject(1)
       assert.strictEqual(cache.first, null, "Should be 'null'")
       assert.strictEqual(cache.last, null, "Should be 'null'")
       assert.strictEqual(cache.size, 0, "Should be 'null'")
@@ -194,14 +194,14 @@ describe('LRU', function () {
     })
 
     it('It should expose expiration time', () => {
-      cache = lru(1, 6e4)
+      cache = new LruObject(1, 6e4)
       cache.set(items[0], false)
       assert.strictEqual(typeof cache.expiresAt(items[0]), 'number', 'Should be a number')
       assert.strictEqual(cache.expiresAt('invalid'), undefined, 'Should be undefined')
     })
 
     it('It should reset the TTL after resetting value', async () => {
-      cache = lru(1, 100)
+      cache = new LruObject(1, 100)
       cache.set(items[0], false)
       const n1 = cache.expiresAt(items[0])
       assert.strictEqual(typeof n1, 'number', 'Should be a number')

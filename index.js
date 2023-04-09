@@ -1,9 +1,12 @@
-import { fifo } from './src/fifo.js'
-import { lru } from './src/lru.js'
-import { lruObject } from './src/lru-object.js'
-import { fifoObject } from './src/fifo-object.js'
+import { FifoMap } from './src/FifoMap.js'
+import { LruMap } from './src/LruMap.js'
+import { LruObject } from './src/LruObject.js'
+import { FifoObject } from './src/FifoObject.js'
 
-export { fifo }
-export { lru }
-export { lruObject }
-export { fifoObject }
+export { FifoObject }
+export { FifoMap }
+export { LruObject }
+export { LruMap }
+
+export { FifoObject as Fifo }
+export { LruObject as Lru }

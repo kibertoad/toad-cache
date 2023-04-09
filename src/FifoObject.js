@@ -1,5 +1,13 @@
-class FIFOObject {
-  constructor(max = 0, ttl = 0) {
+export class FifoObject {
+  constructor(max = 1000, ttl = 0) {
+    if (isNaN(max) || max < 0) {
+      throw new Error('Invalid max value')
+    }
+
+    if (isNaN(ttl) || ttl < 0) {
+      throw new Error('Invalid ttl value')
+    }
+
     this.first = null
     this.items = Object.create(null)
     this.last = null
@@ -112,16 +120,4 @@ class FIFOObject {
 
     this.last = item
   }
-}
-
-export function fifoObject(max = 1000, ttl = 0) {
-  if (isNaN(max) || max < 0) {
-    throw new TypeError('Invalid max value')
-  }
-
-  if (isNaN(ttl) || ttl < 0) {
-    throw new TypeError('Invalid ttl value')
-  }
-
-  return new FIFOObject(max, ttl)
 }

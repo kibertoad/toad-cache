@@ -39,8 +39,9 @@
     "rollup": "rollup --config",
     "test": "vitest",
     "test:coverage": "npm run rollup && npm run test -- --coverage",
-    "test:ci": "npm run lint && npm run test:coverage",
-    "types": "npx -p typescript tsc src/lru.js --declaration --allowJs --emitDeclarationOnly --outDir .",
+    "test:ci": "npm run lint && npm run test:coverage && npm run test:typescript",
+    "test:typescript": "tsd",
+    "types:generate": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
@@ -55,6 +56,7 @@
     "precise": "^2.0.1",
     "rollup": "^3.20.2",
     "vitest": "0.29.8",
+    "tsd": "^0.28.1",
     "typescript": "^5.0.4"
   },
   "keywords": [

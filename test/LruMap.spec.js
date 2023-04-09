@@ -1,24 +1,24 @@
 import assert from 'node:assert'
 import { it, describe, beforeEach, expect } from 'vitest'
-import { fifo } from '../src/fifo.js'
+import { LruMap } from '../src/LruMap.js'
 import { items, populateCache } from './utils/cachePopulator.js'
 import { setTimeout } from 'timers/promises'
 
-describe('FIFO', function () {
+describe('LruMap', function () {
   let cache
 
   beforeEach(function () {
-    cache = fifo(4)
+    cache = new LruMap(4)
     populateCache(cache)
   })
 
   describe('constructor validations', () => {
     it('throws on invalid max', () => {
-      expect(() => fifo('abc')).to.throw(/Invalid max value/)
+      expect(() => new LruMap('abc')).to.throw(/Invalid max value/)
     })
 
     it('throws on invalid ttl', () => {
-      expect(() => fifo(100, 'abc')).to.throw(/Invalid ttl value/)
+      expect(() => new LruMap(100, 'abc')).to.throw(/Invalid ttl value/)
     })
   })
 
@@ -50,7 +50,7 @@ describe('FIFO', function () {
     })
 
     it('adjusts links to null when evicting last entry', () => {
-      cache = fifo(4)
+      cache = new LruMap(4)
       cache.set(items[0], items[0])
       expect(Array.from(cache.keys())).toHaveLength(1)
       expect(cache.last.value).toBe(items[0])
@@ -65,7 +65,7 @@ describe('FIFO', function () {
 
   describe('get', () => {
     it('deletes expired entries', async () => {
-      cache = fifo(4, 500)
+      cache = new LruMap(4, 500)
       populateCache(cache)
       await setTimeout(300)
       cache.set(items[2], items[2])
@@ -86,7 +86,7 @@ describe('FIFO', function () {
 
   describe('set', () => {
     it('Does not set expiration time on resetting entry when ttl is 0', () => {
-      cache = fifo(1000, 0)
+      cache = new LruMap(1000, 0)
 
       cache.set(items[0], false)
       cache.set(items[0], items[0])
@@ -97,9 +97,9 @@ describe('FIFO', function () {
 
   describe('delete', () => {
     it('It should delete', function () {
-      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
-      assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
-      assert.strictEqual(cache.size, 4, "Should be '4'")
+      expect(cache.first.key).toBe('b')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(4)
       assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
       assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
@@ -123,11 +123,11 @@ describe('FIFO', function () {
       assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.size, 2, "Should be '2'")
       cache.get('b')
-      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.first.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.first.prev, null, "Should be 'null'")
-      assert.strictEqual(cache.first.next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.last.prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.first.next.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.prev.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.last.next, null, "Should be 'null'")
       assert.strictEqual(cache.size, 2, "Should be '2'")
     })
@@ -173,17 +173,17 @@ describe('FIFO', function () {
       assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.size, 2, "Should be '2'")
       cache.get('b')
-      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.first.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.first.prev, null, "Should be 'null'")
-      assert.strictEqual(cache.first.next.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
-      assert.strictEqual(cache.last.prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.first.next.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.prev.key, 'd', "Should be 'd'")
       assert.strictEqual(cache.last.next, null, "Should be 'null'")
       assert.strictEqual(cache.size, 2, "Should be '2'")
     })
 
     it('It should handle an empty evict', function () {
-      cache = fifo(1)
+      cache = new LruMap(1)
       assert.strictEqual(cache.first, null, "Should be 'null'")
       assert.strictEqual(cache.last, null, "Should be 'null'")
       assert.strictEqual(cache.size, 0, "Should be 'null'")
@@ -193,15 +193,15 @@ describe('FIFO', function () {
       assert.strictEqual(cache.size, 0, "Should be 'null'")
     })
 
-    it('It should expose expiration time', function () {
-      cache = fifo(1, 6e4)
+    it('It should expose expiration time', () => {
+      cache = new LruMap(1, 6e4)
       cache.set(items[0], false)
       assert.strictEqual(typeof cache.expiresAt(items[0]), 'number', 'Should be a number')
       assert.strictEqual(cache.expiresAt('invalid'), undefined, 'Should be undefined')
     })
 
     it('It should reset the TTL after resetting value', async () => {
-      cache = fifo(1, 100)
+      cache = new LruMap(1, 100)
       cache.set(items[0], false)
       const n1 = cache.expiresAt(items[0])
       assert.strictEqual(typeof n1, 'number', 'Should be a number')
