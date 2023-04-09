@@ -8,9 +8,9 @@ Least-Recently-Used and First-In-First-Out caches for Client or Server.
 ## Getting started
 
 ```javascript
-import { lru, fifo } from "toad-cache";
-const LruCache = lru(max, ttl = 0);
-const FifoCache = fifo(max, ttl = 0);
+import { Lru, Fifo } from "toad-cache";
+const lruCache = new Lru(max, ttl = 0);
+const fifoCache = new Fifo(max, ttl = 0);
 ```
 
 ## clear
@@ -70,7 +70,7 @@ Item in "first" or "bottom" position
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = new Lru();
 
 cache.first; // null - it's a new cache!
 ```
@@ -110,7 +110,7 @@ Max items to hold in cache (1000)
 **Example**
 
 ```javascript
-const cache = lru(500);
+const cache = new Lru(500);
 
 cache.max; // 500
 ```
@@ -123,7 +123,7 @@ Item in "last" or "top" position
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = new Lru();
 
 cache.last; // null - it's a new cache!
 ```
@@ -150,7 +150,7 @@ Number of items in cache
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = new Lru();
 
 cache.size; // 0 - it's a new cache!
 ```
@@ -163,7 +163,7 @@ Milliseconds an item will remain in cache; lazy expiration upon next `get()` of 
 **Example**
 
 ```javascript
-const cache = lru();
+const cache = new Lru();
 
 cache.ttl = 3e4;
 ```
