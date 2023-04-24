@@ -19,6 +19,7 @@
   "source": "index.js",
   "main": "dist/toad-cache",
   "exports": {
+    "types": "./toad-cache.d.ts",
     "import": "./dist/toad-cache.js",
     "require": "./dist/toad-cache.cjs"
   },
