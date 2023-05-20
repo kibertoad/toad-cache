@@ -190,7 +190,7 @@ const sharedRecord = new HitStatisticsRecord() // if you want to use single reco
 const cache = new LruHitStatistics({
   cacheId: 'some-cache-id',
   globalStatisticsRecord: sharedRecord,
-  statisticTtlInHours: 12, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
+  statisticTtlInHours: 24, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
   max: 1000,
   ttlInMsecs: 0,
 })
