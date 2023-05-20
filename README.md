@@ -182,7 +182,7 @@ cache.ttl = 3e4
 
 ## Hit/miss/expiration tracking
 
-In case you want to gather information on cache hit/miss/expiration ratio, you can use LruObjectHitStatistics class:
+In case you want to gather information on cache hit/miss/expiration ratio, you can use LruHitStatistics class:
 
 ```js
 const sharedRecord = new HitStatisticsRecord() // if you want to use single record object for all of caches, create it manually and pass to each cache
