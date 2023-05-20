@@ -213,6 +213,8 @@ const alsoStatistics = cache.getStatistics()
     },
   },
 }
+
+Note that date here reflects start of the rotation. If statistics weren't rotated yet, and another day started, it will still be counted against the day of the rotation start
 */
 ```
 
