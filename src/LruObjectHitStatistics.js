@@ -2,17 +2,17 @@ import { LruObject } from './LruObject.js'
 import { HitStatistics } from './HitStatistics.js'
 
 export class LruObjectHitStatistics extends LruObject {
-  constructor(cacheParams) {
-    super(cacheParams.max || 1000, cacheParams.ttlInMsecs || 0)
+  constructor(max, ttlInMsecs, cacheId, globalStatisticsRecord, statisticTtlInHours) {
+    super(max || 1000, ttlInMsecs || 0)
 
-    if (!cacheParams.cacheId) {
+    if (!cacheId) {
       throw new Error('Cache id is mandatory')
     }
 
     this.hitStatistics = new HitStatistics(
-      cacheParams.cacheId,
-      cacheParams.statisticTtlInHours !== undefined ? cacheParams.statisticTtlInHours : 24,
-      cacheParams.globalStatisticsRecord
+      cacheId,
+      statisticTtlInHours !== undefined ? statisticTtlInHours : 24,
+      globalStatisticsRecord
     )
   }
 
