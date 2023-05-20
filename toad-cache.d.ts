@@ -1,4 +1,4 @@
-export type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number) => T
+export type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string) => T
 
 export interface ToadCache<T> {
     first: any;
@@ -94,15 +94,8 @@ export class HitStatisticsRecord {
     initForCache(cacheId: string, currentTimeStamp: string): void
 }
 
-export type LruObjectHitStatisticsOptions = {
-    cacheId: string
-    globalStatisticsRecord?: HitStatisticsRecord
-    statisticTtlInHours?: number
-    max?: number
-    ttlInMsecs?: number
-}
 export class LruObjectHitStatistics<T> extends LruObject<T>{
-    constructor(options: LruObjectHitStatisticsOptions);
+    constructor(max?: number, ttlInMsecs?: number, cacheId?: string, globalStatisticsRecord?: HitStatisticsRecord, statisticTtlInHours?: number);
 }
 
 export { FifoObject as Fifo }

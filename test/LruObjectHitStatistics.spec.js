@@ -12,30 +12,21 @@ describe('LruObjectHitStatistics', function () {
 
   describe('constructor validations', () => {
     it('throws on invalid max', () => {
-      expect(
-        () =>
-          new LruObjectHitStatistics({
-            max: 'abc',
-          })
-      ).to.throw(/Invalid max value/)
+      expect(() => new LruObjectHitStatistics('abc')).to.throw(/Invalid max value/)
     })
 
     it('throws on invalid ttl', () => {
-      expect(() => new LruObjectHitStatistics({ max: 100, ttlInMsecs: 'abc' })).to.throw(/Invalid ttl value/)
+      expect(() => new LruObjectHitStatistics(100, 'abc')).to.throw(/Invalid ttl value/)
     })
 
     it('throws on no cacheId', () => {
-      expect(() => new LruObjectHitStatistics({ max: 100, ttlInMsecs: 123 })).to.throw(/Cache id is mandatory/)
+      expect(() => new LruObjectHitStatistics(100, 123)).to.throw(/Cache id is mandatory/)
     })
   })
 
   describe('get', () => {
     it('deletes expired entries', async () => {
-      cache = new LruObjectHitStatistics({
-        max: 4,
-        ttlInMsecs: 500,
-        cacheId: 'cache 1',
-      })
+      cache = new LruObjectHitStatistics(4, 500, 'cache 1')
       populateCache(cache)
       await setTimeout(300)
       cache.set(items[2], items[2])
@@ -64,11 +55,7 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('registers misses', async () => {
-      cache = new LruObjectHitStatistics({
-        max: 4,
-        ttlInMsecs: 500,
-        cacheId: 'cache 1',
-      })
+      cache = new LruObjectHitStatistics(4, 500, 'cache 1')
       const item = cache.get('dummy')
 
       expect(item).toBeUndefined()
@@ -85,10 +72,7 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('resets records when record ttl is exceeded', async () => {
-      cache = new LruObjectHitStatistics({
-        cacheId: 'cache 1',
-        statisticTtlInHours: 0,
-      })
+      cache = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
       const item = cache.get('dummy')
       const item2 = cache.get('dummy')
       const item3 = cache.get('dummy')
@@ -109,10 +93,7 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('deletes old data on reset', async () => {
-      cache = new LruObjectHitStatistics({
-        cacheId: 'cache 1',
-        statisticTtlInHours: 0,
-      })
+      cache = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
       const item = cache.get('dummy')
       const item2 = cache.get('dummy')
       const item3 = cache.get('dummy')
@@ -151,12 +132,7 @@ describe('LruObjectHitStatistics', function () {
     it('supports global record', async () => {
       const statistics = new HitStatisticsRecord()
       statistics.initForCache('older cache', timestamp)
-      cache = new LruObjectHitStatistics({
-        max: 4,
-        ttlInMsecs: 500,
-        cacheId: 'cache 1',
-        globalStatisticsRecord: statistics,
-      })
+      cache = new LruObjectHitStatistics(4, 500, 'cache 1', statistics)
       const item = cache.get('dummy')
 
       expect(item).toBeUndefined()
