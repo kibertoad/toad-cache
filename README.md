@@ -190,7 +190,7 @@ const sharedRecord = new HitStatisticsRecord() // if you want to use single reco
 const cache = new LruHitStatistics({
   cacheId: 'some-cache-id',
   globalStatisticsRecord: sharedRecord,
-  statisticTtlInHours: 12, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
+  statisticTtlInHours: 24, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
   max: 1000,
   ttlInMsecs: 0,
 })
@@ -213,6 +213,8 @@ const alsoStatistics = cache.getStatistics()
     },
   },
 }
+
+Note that date here reflects start of the rotation. If statistics weren't rotated yet, and another day started, it will still be counted against the day of the rotation start
 */
 ```
 
