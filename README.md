@@ -9,8 +9,8 @@ Least-Recently-Used and First-In-First-Out caches for Client or Server.
 
 ```javascript
 import { Lru, Fifo } from 'toad-cache'
-const lruCache = new Lru(max, (ttl = 0))
-const fifoCache = new Fifo(max, (ttl = 0))
+const lruCache = new Lru(max, ttl = 0)
+const fifoCache = new Fifo(max, ttl = 0)
 ```
 
 ## clear
