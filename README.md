@@ -8,12 +8,13 @@ Least-Recently-Used and First-In-First-Out caches for Client or Server.
 ## Getting started
 
 ```javascript
-import { Lru, Fifo } from "toad-cache";
-const lruCache = new Lru(max, ttl = 0);
-const fifoCache = new Fifo(max, ttl = 0);
+import { Lru, Fifo } from 'toad-cache'
+const lruCache = new Lru(max, (ttl = 0))
+const fifoCache = new Fifo(max, (ttl = 0))
 ```
 
 ## clear
+
 ### Method
 
 Clears the contents of the cache
@@ -21,23 +22,25 @@ Clears the contents of the cache
 **Example**
 
 ```javascript
-cache.clear();
+cache.clear()
 ```
 
 ## delete
+
 ### Method
 
 Removes item from cache
 
-	param  {String} key Item key
+    param  {String} key Item key
 
 **Example**
 
 ```javascript
-cache.delete("myKey");
+cache.delete('myKey')
 ```
 
 ## evict
+
 ### Method
 
 Evicts the least recently used item from cache
@@ -45,24 +48,26 @@ Evicts the least recently used item from cache
 **Example**
 
 ```javascript
-cache.evict();
+cache.evict()
 ```
 
 ## expiresAt
+
 ### Method
 
 Gets expiration time for cached item
 
-	param  {String} key Item key
-	return {Mixed}      Undefined or number (epoch time)
+    param  {String} key Item key
+    return {Mixed}      Undefined or number (epoch time)
 
 **Example**
 
 ```javascript
-const item = cache.expiresAt("myKey");
+const item = cache.expiresAt('myKey')
 ```
 
 ## first
+
 ### Property
 
 Item in "first" or "bottom" position
@@ -70,39 +75,42 @@ Item in "first" or "bottom" position
 **Example**
 
 ```javascript
-const cache = new Lru();
+const cache = new Lru()
 
-cache.first; // null - it's a new cache!
+cache.first // null - it's a new cache!
 ```
 
 ## get
+
 ### Method
 
 Gets cached item and moves it to the front
 
-	param  {String} key Item key
-	return {Mixed}      Undefined or Item value
+    param  {String} key Item key
+    return {Mixed}      Undefined or Item value
 
 **Example**
 
 ```javascript
-const item = cache.get("myKey");
+const item = cache.get('myKey')
 ```
 
 ## keys
+
 ### Method
 
 Returns an `Array` of cache item keys.
 
-	return {Array} Array of keys
+    return {Array} Array of keys
 
 **Example**
 
 ```javascript
-console.log(cache.keys());
+console.log(cache.keys())
 ```
 
 ## max
+
 ### Property
 
 Max items to hold in cache (1000)
@@ -110,12 +118,13 @@ Max items to hold in cache (1000)
 **Example**
 
 ```javascript
-const cache = new Lru(500);
+const cache = new Lru(500)
 
-cache.max; // 500
+cache.max // 500
 ```
 
 ## last
+
 ### Property
 
 Item in "last" or "top" position
@@ -123,26 +132,28 @@ Item in "last" or "top" position
 **Example**
 
 ```javascript
-const cache = new Lru();
+const cache = new Lru()
 
-cache.last; // null - it's a new cache!
+cache.last // null - it's a new cache!
 ```
 
 ## set
+
 ### Method
 
 Sets item in cache as `first`
 
-	param  {String} key   Item key
-	param  {Mixed}  value Item value
+    param  {String} key   Item key
+    param  {Mixed}  value Item value
 
 **Example**
 
 ```javascript
-cache.set("myKey", { prop: true });
+cache.set('myKey', { prop: true })
 ```
 
 ## size
+
 ### Property
 
 Number of items in cache
@@ -150,12 +161,13 @@ Number of items in cache
 **Example**
 
 ```javascript
-const cache = new Lru();
+const cache = new Lru()
 
-cache.size; // 0 - it's a new cache!
+cache.size // 0 - it's a new cache!
 ```
 
 ## ttl
+
 ### Property
 
 Milliseconds an item will remain in cache; lazy expiration upon next `get()` of an item
@@ -163,12 +175,49 @@ Milliseconds an item will remain in cache; lazy expiration upon next `get()` of 
 **Example**
 
 ```javascript
-const cache = new Lru();
+const cache = new Lru()
 
-cache.ttl = 3e4;
+cache.ttl = 3e4
+```
+
+## Hit/miss/expiration tracking
+
+In case you want to gather information on cache hit/miss/expiration ratio, you can use LruObjectHitStatistics class:
+
+```js
+const sharedRecord = new HitStatisticsRecord() // if you want to use single record object for all of caches, create it manually and pass to each cache
+
+const cache = new LruHitStatistics({
+  cacheId: 'some-cache-id',
+  globalStatisticsRecord: sharedRecord,
+  statisticTtlInHours: 12, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
+  max: 1000,
+  ttlInMsecs: 0,
+})
+```
+
+You can retrieve accumulated statistics from the cache, or from the record directly:
+
+```js
+// this is the same
+const statistics = sharedRecord.getStatistics()
+const alsoStatistics = cache.getStatistics()
+
+/*
+{
+  'some-cache-id': {
+    '2023-04-06': {
+      expirations: 0,
+      hits: 0,
+      misses: 1,
+    },
+  },
+}
+*/
 ```
 
 ## License
+
 Copyright (c) 2023 Igor Savin
 
 Based on [tiny-lru](https://github.com/avoidwork/tiny-lru), created by Jason Mulligan

@@ -84,5 +84,26 @@ export class LruObject<T> implements ToadCache<T> {
     set(key: any, value: T): void;
 }
 
+export class HitStatisticsRecord {
+    records: Record<string, Record<string, {
+        expirations: number,
+        hits: number,
+        misses: number,
+    }>>
+
+    initForCache(cacheId: string, currentTimeStamp: string): void
+}
+
+export type LruObjectHitStatisticsOptions = {
+    cacheId: string
+    globalStatisticsRecord?: HitStatisticsRecord
+    statisticTtlInHours?: number
+    max?: number
+    ttlInMsecs?: number
+}
+export class LruObjectHitStatistics<T> extends LruObject<T>{
+    constructor(options: LruObjectHitStatisticsOptions);
+}
+
 export { FifoObject as Fifo }
 export { LruObject as Lru }
