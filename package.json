@@ -46,17 +46,17 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@vitest/coverage-c8": "0.29.8",
+    "@vitest/coverage-c8": "^0.31.1",
     "@rollup/plugin-terser": "^0.4.0",
     "auto-changelog": "^2.4.0",
     "del-cli": "^5.0.0",
-    "eslint": "^8.38.0",
+    "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "precise": "^2.0.1",
-    "rollup": "^3.20.2",
-    "vitest": "0.29.8",
+    "rollup": "^3.22.0",
+    "vitest": "^0.31.1",
     "tsd": "^0.28.1",
     "typescript": "^5.0.4"
   },
