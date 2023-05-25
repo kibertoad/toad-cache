@@ -92,6 +92,7 @@ export class HitStatisticsRecord {
     }>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void
+    resetForCache(cacheId: string): void
 }
 
 export class LruObjectHitStatistics<T> extends LruObject<T>{
