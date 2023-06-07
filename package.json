@@ -56,7 +56,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "precise": "^2.0.1",
     "rollup": "^3.22.0",
-    "vitest": "^0.31.1",
+    "vitest": "^0.32.0",
     "tsd": "^0.28.1",
     "typescript": "^5.0.4"
   },
