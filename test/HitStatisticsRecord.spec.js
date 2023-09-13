@@ -32,14 +32,14 @@ describe('HitStatisticsRecord', () => {
 
       expect(record.records).toEqual({
         cache1: {
-          '2023-05-25': {
+          [currentTimeStamp]: {
             expirations: 100,
             hits: 100,
             misses: 100,
           },
         },
         cache2: {
-          '2023-05-25': {
+          [currentTimeStamp]: {
             expirations: 0,
             hits: 0,
             misses: 0,

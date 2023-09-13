@@ -1,5 +1,7 @@
 # Toad Cache
 
+[![NPM Version](https://img.shields.io/npm/v/toad-cache.svg)](https://npmjs.org/package/toad-cache)
+[![NPM Downloads](https://img.shields.io/npm/dm/toad-cache.svg)](https://npmjs.org/package/toad-cache)
 ![](https://github.com/kibertoad/toad-cache/workflows/ci/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/kibertoad/toad-cache/badge.svg?branch=main)](https://coveralls.io/r/kibertoad/toad-cache?branch=main)
 
