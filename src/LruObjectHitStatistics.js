@@ -12,7 +12,7 @@ export class LruObjectHitStatistics extends LruObject {
     this.hitStatistics = new HitStatistics(
       cacheId,
       statisticTtlInHours !== undefined ? statisticTtlInHours : 24,
-      globalStatisticsRecord
+      globalStatisticsRecord,
     )
   }
 
