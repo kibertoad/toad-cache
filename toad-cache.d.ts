@@ -8,10 +8,12 @@ export interface ToadCache<T> {
     size: number;
     clear(): void;
     delete(key: any): void;
+    deleteMany(keys: any[]): void;
     evict(): void;
     expiresAt(key: any): any;
     keys(): any;
     get(key: any): T | undefined;
+    getMany(keys: any[]): (T | undefined)[];
     set(key: any, value: T): void;
 }
 
@@ -25,9 +27,11 @@ export class FifoMap<T> implements ToadCache<T>{
     size: number;
     clear(): void;
     delete(key: any): void;
+    deleteMany(keys: any[]): void;
     evict(): void;
     expiresAt(key: any): any;
     get(key: any): T | undefined;
+    getMany(keys: any[]): (T | undefined)[];
     keys(): IterableIterator<any>;
     set(key: any, value: T): void;
 }
@@ -42,9 +46,11 @@ export class FifoObject<T> implements ToadCache<T> {
     ttl: number;
     clear(): void;
     delete(key: any): void;
+    deleteMany(keys: any[]): void;
     evict(): void;
     expiresAt(key: any): any;
     get(key: any): T | undefined;
+    getMany(keys: any[]): (T | undefined)[];
     keys(): string[];
     set(key: any, value: T): void;
 }
@@ -59,9 +65,11 @@ export class LruMap<T> implements ToadCache<T> {
     size: number;
     clear(): void;
     delete(key: any): void;
+    deleteMany(keys: any[]): void;
     evict(): void;
     expiresAt(key: any): any;
     get(key: any): T | undefined;
+    getMany(keys: any[]): (T | undefined)[];
     keys(): IterableIterator<any>;
     set(key: any, value: T): void;
 }
@@ -77,9 +85,11 @@ export class LruObject<T> implements ToadCache<T> {
 
     clear(): void;
     delete(key: any): void;
+    deleteMany(keys: any[]): void;
     evict(): void;
     expiresAt(key: any): any;
     get(key: any): T | undefined;
+    getMany(keys: any[]): (T | undefined)[];
     keys(): string[];
     set(key: any, value: T): void;
 }
