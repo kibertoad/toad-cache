@@ -84,6 +84,25 @@ describe('FifoMap', function () {
     })
   })
 
+  describe('getMany', () => {
+    it('deletes expired entries', async () => {
+      cache = new FifoMap(4, 500)
+      populateCache(cache)
+      await setTimeout(300)
+      cache.set(items[2], items[2])
+      const itemsPre = cache.getMany([items[1], items[2]])
+
+      await setTimeout(300)
+
+      const itemsPost = cache.getMany([items[1], items[2]])
+
+      expect(itemsPre[0]).toBe(false)
+      expect(itemsPost[0]).toBeUndefined()
+      expect(itemsPre[1]).toBe(items[2])
+      expect(itemsPost[1]).toBe(items[2])
+    })
+  })
+
   describe('set', () => {
     it('Does not set expiration time on resetting entry when ttl is 0', () => {
       cache = new FifoMap(1000, 0)
@@ -142,6 +161,52 @@ describe('FifoMap', function () {
       expect(cache.first.key).toBe('c')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(3)
+    })
+  })
+
+  describe('deleteMany', () => {
+    it('It should delete', function () {
+      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.size, 4, "Should be '4'")
+      assert.strictEqual(cache.items.get('e').next, null, "Should be 'null'")
+      assert.strictEqual(cache.items.get('e').prev.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items.get('d').next.key, 'e', "Should be 'e'")
+      assert.strictEqual(cache.items.get('d').prev.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items.get('c').next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items.get('c').prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items.get('b').next.key, 'c', "Should be 'c'")
+      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      cache.deleteMany(['c', 'e'])
+      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.size, 2, "Should be '2'")
+      assert.strictEqual(cache.items.get('d').next, null, "Should be 'null'")
+      assert.strictEqual(cache.items.get('d').prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.items.get('b').next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.items.get('b').prev, null, "Should be 'null'")
+      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.size, 2, "Should be '2'")
+      cache.get('b')
+      assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.first.prev, null, "Should be 'null'")
+      assert.strictEqual(cache.first.next.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.last.key, 'd', "Should be 'd'")
+      assert.strictEqual(cache.last.prev.key, 'b', "Should be 'b'")
+      assert.strictEqual(cache.last.next, null, "Should be 'null'")
+      assert.strictEqual(cache.size, 2, "Should be '2'")
+    })
+
+    it('Adjusts first item after it is deleted', () => {
+      expect(cache.first.key).toBe('b')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(4)
+
+      cache.deleteMany([cache.first.key, cache.first.next.key])
+
+      expect(cache.first.key).toBe('d')
+      expect(cache.last.key).toBe('e')
+      expect(cache.size).toBe(2)
     })
   })
 

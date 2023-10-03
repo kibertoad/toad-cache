@@ -41,6 +41,20 @@ Removes item from cache
 cache.delete('myKey')
 ```
 
+## deleteMany
+
+### Method
+
+Removes items from cache
+
+    param  {String[]} keys Item keys
+
+**Example**
+
+```javascript
+cache.deleteMany(['myKey', 'myKey2'])
+```
+
 ## evict
 
 ### Method
@@ -86,7 +100,7 @@ cache.first // null - it's a new cache!
 
 ### Method
 
-Gets cached item and moves it to the front
+Gets cached item and marks it as recently used (pushes to the back of the list of the candidates for the eviction)
 
     param  {String} key Item key
     return {Mixed}      Undefined or Item value
@@ -95,6 +109,21 @@ Gets cached item and moves it to the front
 
 ```javascript
 const item = cache.get('myKey')
+```
+
+## getMany
+
+### Method
+
+Gets multiple cached items and marks them as recently used (pushes to the back of the list of the candidates for the eviction)
+
+    param  {String[]} keys Item keys
+    return {Mixed[]}      Undefined or Item values
+
+**Example**
+
+```javascript
+const item = cache.getMany(['myKey', 'myKey2'])
 ```
 
 ## keys
