@@ -26,7 +26,7 @@ export class LruObject {
     }
 
     item.next = null
-    item.prev = this.last
+    item.prev = last
     last.next = item
 
     if (prev !== null) {
@@ -141,6 +141,7 @@ export class LruObject {
       if (this.last !== item) {
         this.bumpLru(item)
       }
+
       return
     }
 
