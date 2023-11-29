@@ -1,7 +1,7 @@
 {
   "name": "toad-cache",
   "description": "LRU and FIFO caches for Client or Server",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "homepage": "https://github.com/kibertoad/toad-cache",
   "author": "Igor Savin <kibertoad@gmail.com>",
   "repository": {
