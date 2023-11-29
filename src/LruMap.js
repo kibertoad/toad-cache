@@ -20,6 +20,10 @@ export class LruMap {
   }
 
   bumpLru(item) {
+    if (this.last === item) {
+      return // Item is already the last one, no need to bump
+    }
+
     const last = this.last
     const next = item.next
     const prev = item.prev
