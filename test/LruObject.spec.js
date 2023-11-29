@@ -82,6 +82,34 @@ describe('LruObject', function () {
       expect(item2Pre).toBe(items[2])
       expect(item2Post).toBe(items[2])
     })
+
+    it('does not overwrite cache.first', async () => {
+      cache = new LruObject(5, 500)
+
+      const key = '10.0.0.1'
+      const value = 100
+
+      cache.set(key, value)
+      expect(cache.first).not.toBeNull()
+
+      cache.get(key)
+      expect(cache.first).not.toBeNull()
+    })
+
+    it('does not cause TypeError when reaching the cache limit', async () => {
+      const maxCacheSize = 3
+      cache = new LruObject(maxCacheSize, 500)
+
+      const key = '10.0.0.1'
+      const value = 100
+
+      cache.set(key, value)
+      cache.get(key)
+
+      for (let i = 0; i < maxCacheSize; i++) {
+        cache.set(i, i)
+      }
+    })
   })
 
   describe('getMany', () => {
