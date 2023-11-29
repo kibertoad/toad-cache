@@ -116,7 +116,6 @@ export class LruObject {
 
       // Item is still fresh
       this.bumpLru(item)
-
       return item.value
     }
   }
