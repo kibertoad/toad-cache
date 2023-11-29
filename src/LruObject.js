@@ -22,7 +22,7 @@ export class LruObject {
     const prev = item.prev
 
     if (this.first === item) {
-      this.first = item.next
+      this.first = next
     }
 
     item.next = null
