@@ -110,8 +110,11 @@ export class LruObject {
         return
       }
 
-      // Item is still fresh
-      this.bumpLru(item)
+      if (this.size !== 1) {
+        // Item is still fresh & needs to be bumped
+        this.bumpLru(item)
+      }
+
       return item.value
     }
   }
