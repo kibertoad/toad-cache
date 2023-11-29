@@ -40,7 +40,7 @@
   "engineStrict": true,
   "scripts": {
     "build": "del-cli dist && del-cli coverage && npm run rollup",
-    "benchmark": "node benchmark.js",
+    "benchmark": "npm run build && node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "eslint *.js src/*.js test/*.js",
     "lint:fix": "eslint --fix *.js src/*.js test/*.js",

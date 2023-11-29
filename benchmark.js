@@ -1,8 +1,8 @@
-import { lru } from './dist/tiny-lru.esm.js'
+import { Lru } from './dist/toad-cache.mjs'
 import { precise } from 'precise'
 
 const nth = 2e3,
-  cache = lru(nth),
+  cache = new Lru(nth),
   data = new Array(nth)
 
 function seed() {
