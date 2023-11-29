@@ -29,11 +29,11 @@ export class LruMap {
     const prev = item.prev
 
     if (this.first === item) {
-      this.first = item.next
+      this.first = next
     }
 
     item.next = null
-    item.prev = this.last
+    item.prev = last
     last.next = item
 
     if (prev !== null) {
@@ -146,6 +146,7 @@ export class LruMap {
       if (this.last !== item) {
         this.bumpLru(item)
       }
+
       return
     }
 

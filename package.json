@@ -13,25 +13,33 @@
   },
   "files": [
     "dist",
-    "*.d.ts"
+    "*.d.ts",
+    "*.d.cts"
   ],
   "license": "MIT",
   "source": "index.js",
-  "main": "dist/toad-cache",
   "exports": {
-    "types": "./toad-cache.d.ts",
-    "import": "./dist/toad-cache.js",
-    "require": "./dist/toad-cache.cjs"
+    ".": {
+      "import": {
+        "types": "./toad-cache.d.ts",
+        "default": "./dist/toad-cache.mjs"
+      },
+      "require": {
+        "types": "./toad-cache.d.cts",
+        "default": "./dist/toad-cache.cjs"
+      }
+    }
   },
+  "main": "dist/toad-cache.cjs",
+  "types": "./toad-cache.d.ts",
   "type": "module",
   "sourceType": "module",
-  "types": "toad-cache.d.ts",
   "engines": {
     "node": ">=12"
   },
   "engineStrict": true,
   "scripts": {
-    "build": "del-cli dist && del-cli coverage && npm run test:ci",
+    "build": "del-cli dist && del-cli coverage && npm run rollup",
     "benchmark": "npm run build && node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "eslint *.js src/*.js test/*.js",
@@ -47,7 +55,7 @@
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^0.34.6",
-    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "auto-changelog": "^2.4.0",
     "del-cli": "^5.1.0",
     "eslint": "^8.50.0",
@@ -55,10 +63,10 @@
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-prettier": "^5.0.0",
     "precise": "^4.0.0",
-    "rollup": "^3.22.0",
+    "rollup": "^4.6.0",
     "vitest": "^0.34.6",
     "tsd": "^0.29.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.2"
   },
   "keywords": [
     "LRU",

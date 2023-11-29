@@ -17,9 +17,6 @@ const bannerShort = `/*!
 const defaultOutBase = {compact: true, banner: bannerLong, name: pkg.name};
 const cjOutBase = {...defaultOutBase, compact: false, format: "cjs", exports: "named"};
 const esmOutBase = {...defaultOutBase, format: "esm"};
-const umdOutBase = {...defaultOutBase, format: "umd"};
-const minOutBase = {banner: bannerShort, name: pkg.name, plugins: [terser()], sourcemap: true};
-
 
 export default [
   {
@@ -31,24 +28,8 @@ export default [
       },
       {
         ...esmOutBase,
-        file: `dist/${pkg.name}.js`
+        file: `dist/${pkg.name}.mjs`
       },
-      {
-        ...esmOutBase,
-        ...minOutBase,
-        file: `dist/${pkg.name}.min.js`
-      },
-      {
-        ...umdOutBase,
-        file: `dist/${pkg.name}.umd.js`,
-        name: "toad-cache"
-      },
-      {
-        ...umdOutBase,
-        ...minOutBase,
-        file: `dist/${pkg.name}.umd.min.js`,
-        name: "toad-cache"
-      }
     ]
   }
 ];
