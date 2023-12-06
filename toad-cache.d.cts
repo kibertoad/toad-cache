@@ -1,5 +1,13 @@
 type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string) => T
 
+type CacheEntry<T> = {
+    expiry: number
+    key: any
+    prev: CacheEntry<T> | null
+    next: CacheEntry<T> | null
+    value: T
+}
+
 interface ToadCache<T> {
     first: any;
     last: any;
@@ -20,7 +28,7 @@ interface ToadCache<T> {
 declare class FifoMap<T> implements ToadCache<T>{
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, any>;
+    items: Map<any, T>;
     last: any;
     max: number;
     ttl: number;
@@ -39,7 +47,7 @@ declare class FifoMap<T> implements ToadCache<T>{
 declare class FifoObject<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: any;
+    items: CacheEntry<T>[];
     last: any;
     size: number;
     max: number;
@@ -58,7 +66,7 @@ declare class FifoObject<T> implements ToadCache<T> {
 declare class LruMap<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, any>;
+    items: Map<any, T>;
     last: any;
     max: number;
     ttl: number;
@@ -77,7 +85,7 @@ declare class LruMap<T> implements ToadCache<T> {
 declare class LruObject<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: any;
+    items: CacheEntry<T>[];
     last: any;
     size: number;
     max: number;
