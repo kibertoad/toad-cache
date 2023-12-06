@@ -47,7 +47,7 @@ export class FifoMap<T> implements ToadCache<T>{
 export class FifoObject<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: CacheEntry<T>[];
+    items: Record<any, CacheEntry<T>>;
     last: any;
     size: number;
     max: number;
@@ -85,7 +85,7 @@ export class LruMap<T> implements ToadCache<T> {
 export class LruObject<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: CacheEntry<T>[];
+    items: Record<any, CacheEntry<T>>;
     last: any;
     size: number;
     max: number;

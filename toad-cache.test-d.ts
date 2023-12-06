@@ -27,5 +27,5 @@ const fifo = new Fifo<number>()
 lru.set('a', 1)
 fifo.set('a', 1)
 
-expectType<CacheEntry<number>[]>(lru.items)
-expectType<CacheEntry<number>[]>(fifo.items)
+expectType<Record<any, CacheEntry<number>>> (lru.items)
+expectType<Record<any, CacheEntry<number>>> (fifo.items)
