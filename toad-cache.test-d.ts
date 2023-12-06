@@ -1,4 +1,4 @@
-import {FifoMap, LruMap, FifoObject, LruObject, Fifo, Lru, CacheConstructor} from './toad-cache'
+import {FifoMap, LruMap, FifoObject, LruObject, Fifo, Lru, CacheConstructor, CacheEntry} from './toad-cache'
 import type { ToadCache } from './toad-cache'
 
 import { expectAssignable, expectType } from 'tsd'
@@ -26,3 +26,6 @@ const fifo = new Fifo<number>()
 
 lru.set('a', 1)
 fifo.set('a', 1)
+
+expectType<CacheEntry<number>[]>(lru.items)
+expectType<CacheEntry<number>[]>(fifo.items)
