@@ -1,4 +1,4 @@
-type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string) => T
+type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string, cacheStatistics?: HitStatisticsRecord) => T
 
 type CacheEntry<T> = {
     expiry: number

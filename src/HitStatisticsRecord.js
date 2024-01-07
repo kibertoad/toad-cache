@@ -6,9 +6,11 @@ export class HitStatisticsRecord {
   initForCache(cacheId, currentTimeStamp) {
     this.records[cacheId] = {
       [currentTimeStamp]: {
+        cacheSize: 0,
         hits: 0,
         misses: 0,
         expirations: 0,
+        evictions: 0,
       },
     }
   }
@@ -16,9 +18,11 @@ export class HitStatisticsRecord {
   resetForCache(cacheId) {
     for (let key of Object.keys(this.records[cacheId])) {
       this.records[cacheId][key] = {
+        cacheSize: 0,
         hits: 0,
         misses: 0,
         expirations: 0,
+        evictions: 0,
       }
     }
   }

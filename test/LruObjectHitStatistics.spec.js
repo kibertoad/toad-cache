@@ -8,7 +8,7 @@ import { getTimestamp } from '../src/utils/dateUtils.js'
 const timestamp = getTimestamp(new Date())
 
 describe('LruObjectHitStatistics', function () {
-  let cache
+  let cache1
 
   describe('constructor validations', () => {
     it('throws on invalid max', () => {
@@ -25,27 +25,29 @@ describe('LruObjectHitStatistics', function () {
   })
 
   describe('get', () => {
-    it('deletes expired entries', async () => {
-      cache = new LruObjectHitStatistics(4, 500, 'cache 1')
-      populateCache(cache)
+    it('deletes expired and excessive entries', async () => {
+      cache1 = new LruObjectHitStatistics(4, 500, 'cache 1')
+      populateCache(cache1)
       await setTimeout(300)
-      cache.set(items[2], items[2])
-      const item1Pre = cache.get(items[1])
-      const item2Pre = cache.get(items[2])
+      cache1.set(items[2], items[2])
+      const item1Pre = cache1.get(items[1])
+      const item2Pre = cache1.get(items[2])
 
       await setTimeout(300)
 
-      const item1Post = cache.get(items[1])
-      const item2Post = cache.get(items[2])
+      const item1Post = cache1.get(items[1])
+      const item2Post = cache1.get(items[2])
 
       expect(item1Pre).toBe(false)
       expect(item1Post).toBeUndefined()
       expect(item2Pre).toBe(items[2])
       expect(item2Post).toBe(items[2])
 
-      expect(cache.getStatistics()).toEqual({
+      expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            cacheSize: 3,
+            evictions: 1,
             expirations: 1,
             hits: 3,
             misses: 0,
@@ -55,14 +57,16 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('registers misses', async () => {
-      cache = new LruObjectHitStatistics(4, 500, 'cache 1')
-      const item = cache.get('dummy')
+      cache1 = new LruObjectHitStatistics(4, 500, 'cache 1')
+      const item = cache1.get('dummy')
 
       expect(item).toBeUndefined()
 
-      expect(cache.getStatistics()).toEqual({
+      expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            cacheSize: 0,
+            evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 1,
@@ -72,18 +76,20 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('resets records when record ttl is exceeded', async () => {
-      cache = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
-      const item = cache.get('dummy')
-      const item2 = cache.get('dummy')
-      const item3 = cache.get('dummy')
+      cache1 = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
+      const item = cache1.get('dummy')
+      const item2 = cache1.get('dummy')
+      const item3 = cache1.get('dummy')
 
       expect(item).toBeUndefined()
       expect(item2).toBeUndefined()
       expect(item3).toBeUndefined()
 
-      expect(cache.getStatistics()).toEqual({
+      expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            cacheSize: 0,
+            evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 1,
@@ -93,10 +99,10 @@ describe('LruObjectHitStatistics', function () {
     })
 
     it('deletes old data on reset', async () => {
-      cache = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
-      const item = cache.get('dummy')
-      const item2 = cache.get('dummy')
-      const item3 = cache.get('dummy')
+      cache1 = new LruObjectHitStatistics(undefined, undefined, 'cache 1', undefined, 0)
+      const item = cache1.get('dummy')
+      const item2 = cache1.get('dummy')
+      const item3 = cache1.get('dummy')
 
       expect(item).toBeUndefined()
       expect(item2).toBeUndefined()
@@ -104,23 +110,27 @@ describe('LruObjectHitStatistics', function () {
 
       const oldTime = new Date(Date.now() - 1000 * 60 * 60 * 24)
       const oldTimeStamp = getTimestamp(oldTime)
-      cache.hitStatistics.records.records = {
+      cache1.hitStatistics.records.records = {
         'cache 1': {
           [oldTimeStamp]: {
+            cacheSize: 0,
+            evictions: 1,
             expirations: 100,
             hits: 100,
             misses: 100,
           },
         },
       }
-      cache.hitStatistics.lastTimeStamp = oldTimeStamp
+      cache1.hitStatistics.lastTimeStamp = oldTimeStamp
 
-      const item4 = cache.get('dummy')
+      const item4 = cache1.get('dummy')
       expect(item4).toBeUndefined()
 
-      expect(cache.getStatistics()).toEqual({
+      expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            cacheSize: 0,
+            evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 1,
@@ -132,27 +142,44 @@ describe('LruObjectHitStatistics', function () {
     it('supports global record', async () => {
       const statistics = new HitStatisticsRecord()
       statistics.initForCache('older cache', timestamp)
-      cache = new LruObjectHitStatistics(4, 500, 'cache 1', statistics)
-      const item = cache.get('dummy')
+      const cache1 = new LruObjectHitStatistics(4, 500, 'cache 1', statistics)
+      const cache2 = new LruObjectHitStatistics(4, 500, 'cache 2', statistics)
+      cache2.set('dummy')
 
-      expect(item).toBeUndefined()
+      cache1.get('dummy')
+      cache2.get('dummy')
 
-      expect(cache.getStatistics()).toEqual({
+      const expectedStatistics = {
         'cache 1': {
           [timestamp]: {
+            cacheSize: 0,
+            evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 1,
           },
         },
+        'cache 2': {
+          [timestamp]: {
+            cacheSize: 1,
+            evictions: 0,
+            expirations: 0,
+            hits: 1,
+            misses: 0,
+          },
+        },
         'older cache': {
           [timestamp]: {
+            cacheSize: 0,
+            evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 0,
           },
         },
-      })
+      }
+      expect(cache1.getStatistics()).toEqual(expectedStatistics)
+      expect(cache2.getStatistics()).toEqual(expectedStatistics)
     })
   })
 })

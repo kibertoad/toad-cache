@@ -213,7 +213,7 @@ cache.ttl = 3e4
 
 ## Hit/miss/expiration tracking
 
-In case you want to gather information on cache hit/miss/expiration ratio, you can use LruHitStatistics class:
+In case you want to gather information on cache hit/miss/expiration ratio, as well as cache size and eviction statistics, you can use LruHitStatistics class:
 
 ```js
 const sharedRecord = new HitStatisticsRecord() // if you want to use single record object for all of caches, create it manually and pass to each cache
@@ -221,7 +221,7 @@ const sharedRecord = new HitStatisticsRecord() // if you want to use single reco
 const cache = new LruHitStatistics({
   cacheId: 'some-cache-id',
   globalStatisticsRecord: sharedRecord,
-  statisticTtlInHours: 24, // how often to rotate statistics. On every rotation, data, that is older than one day, is removed
+  statisticTtlInHours: 24, // how often to reset statistics. On every rotation previously accumulated data is removed
   max: 1000,
   ttlInMsecs: 0,
 })
@@ -238,9 +238,11 @@ const alsoStatistics = cache.getStatistics()
 {
   'some-cache-id': {
     '2023-04-06': {
-      expirations: 0,
-      hits: 0,
-      misses: 1,
+      cacheSize: 100, // how many elements does cache currently have
+      evictions: 5, // how many elements were evicted due to cache being at max capacity    
+      expirations: 0, // how many elements were removed during get due to their ttl being exceeded
+      hits: 0, // how many times element was successfully retrieved from cache during get
+      misses: 1, // how many times element was not in cache or expired during get
     },
   },
 }
