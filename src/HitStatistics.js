@@ -3,15 +3,32 @@ import { getTimestamp } from './utils/dateUtils.js'
 
 export class HitStatistics {
   constructor(cacheId, statisticTtlInHours, globalStatisticsRecord) {
-    this.collectionStart = new Date()
-
-    this.lastTimeStamp = ''
-    this.currentTimeStamp = getTimestamp(this.collectionStart)
     this.cacheId = cacheId
     this.statisticTtlInHours = statisticTtlInHours
 
+    this.collectionStart = new Date()
+    this.currentTimeStamp = getTimestamp(this.collectionStart)
+
     this.records = globalStatisticsRecord || new HitStatisticsRecord()
     this.records.initForCache(this.cacheId, this.currentTimeStamp)
+  }
+
+  get currentRecord() {
+    // safety net
+    /* c8 ignore next 11 */
+    if (!this.records.records[this.cacheId][this.currentTimeStamp]) {
+      this.records.records[this.cacheId][this.currentTimeStamp] = {
+        cacheSize: 0,
+        hits: 0,
+        falsyHits: 0,
+        emptyHits: 0,
+        misses: 0,
+        expirations: 0,
+        evictions: 0,
+      }
+    }
+
+    return this.records.records[this.cacheId][this.currentTimeStamp]
   }
 
   hoursPassed() {
@@ -20,17 +37,36 @@ export class HitStatistics {
 
   addHit() {
     this.archiveIfNeeded()
-    this.records.records[this.cacheId][this.currentTimeStamp].hits++
+    this.currentRecord.hits++
+  }
+  addFalsyHit() {
+    this.archiveIfNeeded()
+    this.currentRecord.falsyHits++
+  }
+
+  addEmptyHit() {
+    this.archiveIfNeeded()
+    this.currentRecord.emptyHits++
   }
 
   addMiss() {
     this.archiveIfNeeded()
-    this.records.records[this.cacheId][this.currentTimeStamp].misses++
+    this.currentRecord.misses++
+  }
+
+  addEviction() {
+    this.archiveIfNeeded()
+    this.currentRecord.evictions++
+  }
+
+  setCacheSize(currentSize) {
+    this.archiveIfNeeded()
+    this.currentRecord.cacheSize = currentSize
   }
 
   addExpiration() {
     this.archiveIfNeeded()
-    this.records.records[this.cacheId][this.currentTimeStamp].expirations++
+    this.currentRecord.expirations++
   }
 
   getStatistics() {
@@ -39,15 +75,7 @@ export class HitStatistics {
 
   archiveIfNeeded() {
     if (this.hoursPassed() >= this.statisticTtlInHours) {
-      const now = new Date()
-      const newTimestamp = getTimestamp(now)
-
-      if (this.lastTimeStamp && this.lastTimeStamp !== newTimestamp) {
-        delete this.records.records[this.cacheId][this.lastTimeStamp]
-      }
-      this.lastTimeStamp = this.currentTimeStamp
-
-      this.collectionStart = now
+      this.collectionStart = new Date()
       this.currentTimeStamp = getTimestamp(this.collectionStart)
       this.records.initForCache(this.cacheId, this.currentTimeStamp)
     }

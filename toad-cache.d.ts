@@ -1,4 +1,4 @@
-export type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string) => T
+export type CacheConstructor<T> = new (max?: number, ttlInMsecs?: number, cacheId?: string, cacheStatistics?: HitStatisticsRecord) => T
 
 export type CacheEntry<T> = {
     expiry: number
@@ -105,8 +105,12 @@ export class LruObject<T> implements ToadCache<T> {
 export class HitStatisticsRecord {
     records: Record<string, Record<string, {
         expirations: number,
+        evictions: number,
         hits: number,
+        emptyHits: number,
+        falsyHits: number,
         misses: number,
+        cacheSize: number,
     }>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void

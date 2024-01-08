@@ -20,6 +20,17 @@ export class LruObjectHitStatistics extends LruObject {
     return this.hitStatistics.getStatistics()
   }
 
+  set(key, value) {
+    super.set(key, value)
+    this.hitStatistics.setCacheSize(this.size)
+  }
+
+  evict() {
+    super.evict()
+    this.hitStatistics.addEviction()
+    this.hitStatistics.setCacheSize(this.size)
+  }
+
   get(key) {
     if (Object.prototype.hasOwnProperty.call(this.items, key)) {
       const item = this.items[key]
@@ -28,11 +39,18 @@ export class LruObjectHitStatistics extends LruObject {
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
         this.hitStatistics.addExpiration()
+        this.hitStatistics.setCacheSize(this.size)
         return
       }
 
       // Item is still fresh
       this.bumpLru(item)
+      if (!item.value) {
+        this.hitStatistics.addFalsyHit()
+      }
+      if (item.value === undefined || item.value === null || item.value === '') {
+        this.hitStatistics.addEmptyHit()
+      }
       this.hitStatistics.addHit()
       return item.value
     }
