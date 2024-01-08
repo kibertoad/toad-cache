@@ -55,7 +55,6 @@ export class LruObjectHitStatistics extends LruObject {
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key, true)
         this.hitStatistics.addExpiration()
-        this.hitStatistics.setCacheSize(this.size)
         return
       }
 
