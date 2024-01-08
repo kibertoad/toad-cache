@@ -21,6 +21,8 @@ describe('HitStatistics', () => {
     expect(hitStatistics.getStatistics()).toEqual({
       cache: {
         '2024-01-02': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,
@@ -37,6 +39,8 @@ describe('HitStatistics', () => {
     expect(hitStatistics.getStatistics()).toEqual({
       cache: {
         '2024-01-03': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,
@@ -61,6 +65,8 @@ describe('HitStatistics', () => {
     expect(globalRecord.records).toEqual({
       cache1: {
         '2024-01-02': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,
@@ -70,6 +76,8 @@ describe('HitStatistics', () => {
       },
       cache2: {
         '2024-01-02': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,
@@ -88,6 +96,8 @@ describe('HitStatistics', () => {
     expect(globalRecord.records).toEqual({
       cache1: {
         '2024-01-03': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,
@@ -97,6 +107,8 @@ describe('HitStatistics', () => {
       },
       cache2: {
         '2024-01-03': {
+          emptyHits: 0,
+          falsyHits: 0,
           cacheSize: 0,
           evictions: 0,
           expirations: 0,

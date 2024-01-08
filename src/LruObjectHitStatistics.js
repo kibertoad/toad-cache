@@ -45,6 +45,12 @@ export class LruObjectHitStatistics extends LruObject {
 
       // Item is still fresh
       this.bumpLru(item)
+      if (!item.value) {
+        this.hitStatistics.addFalsyHit()
+      }
+      if (item.value === undefined || item.value === null || item.value === '') {
+        this.hitStatistics.addEmptyHit()
+      }
       this.hitStatistics.addHit()
       return item.value
     }

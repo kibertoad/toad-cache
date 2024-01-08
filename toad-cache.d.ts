@@ -105,8 +105,12 @@ export class LruObject<T> implements ToadCache<T> {
 export class HitStatisticsRecord {
     records: Record<string, Record<string, {
         expirations: number,
+        evictions: number,
         hits: number,
+        emptyHits: number,
+        falsyHits: number,
         misses: number,
+        cacheSize: number,
     }>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void

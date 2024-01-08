@@ -46,6 +46,8 @@ describe('LruObjectHitStatistics', function () {
       expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            falsyHits: 1,
+            emptyHits: 0,
             cacheSize: 3,
             evictions: 1,
             expirations: 1,
@@ -65,11 +67,53 @@ describe('LruObjectHitStatistics', function () {
       expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 0,
             expirations: 0,
             hits: 0,
             misses: 1,
+          },
+        },
+      })
+    })
+
+    it('registers hits', async () => {
+      cache1 = new LruObjectHitStatistics(4, 500, 'cache 1')
+      cache1.set('dummy', 'value')
+      cache1.get('dummy')
+
+      expect(cache1.getStatistics()).toEqual({
+        'cache 1': {
+          [timestamp]: {
+            cacheSize: 1,
+            evictions: 0,
+            expirations: 0,
+            falsyHits: 0,
+            emptyHits: 0,
+            hits: 1,
+            misses: 0,
+          },
+        },
+      })
+    })
+
+    it('registers falsy hits', async () => {
+      cache1 = new LruObjectHitStatistics(4, 500, 'cache 1')
+      cache1.set('dummy', '')
+      cache1.get('dummy')
+
+      expect(cache1.getStatistics()).toEqual({
+        'cache 1': {
+          [timestamp]: {
+            cacheSize: 1,
+            evictions: 0,
+            expirations: 0,
+            falsyHits: 1,
+            emptyHits: 1,
+            hits: 1,
+            misses: 0,
           },
         },
       })
@@ -88,6 +132,8 @@ describe('LruObjectHitStatistics', function () {
       expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 0,
             expirations: 0,
@@ -113,6 +159,8 @@ describe('LruObjectHitStatistics', function () {
       cache1.hitStatistics.records.records = {
         'cache 1': {
           [oldTimeStamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 1,
             expirations: 100,
@@ -129,6 +177,8 @@ describe('LruObjectHitStatistics', function () {
       expect(cache1.getStatistics()).toEqual({
         'cache 1': {
           [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 0,
             expirations: 0,
@@ -144,7 +194,7 @@ describe('LruObjectHitStatistics', function () {
       statistics.initForCache('older cache', timestamp)
       const cache1 = new LruObjectHitStatistics(4, 500, 'cache 1', statistics)
       const cache2 = new LruObjectHitStatistics(4, 500, 'cache 2', statistics)
-      cache2.set('dummy')
+      cache2.set('dummy', null)
 
       cache1.get('dummy')
       cache2.get('dummy')
@@ -152,6 +202,8 @@ describe('LruObjectHitStatistics', function () {
       const expectedStatistics = {
         'cache 1': {
           [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 0,
             expirations: 0,
@@ -161,6 +213,8 @@ describe('LruObjectHitStatistics', function () {
         },
         'cache 2': {
           [timestamp]: {
+            emptyHits: 1,
+            falsyHits: 1,
             cacheSize: 1,
             evictions: 0,
             expirations: 0,
@@ -170,6 +224,8 @@ describe('LruObjectHitStatistics', function () {
         },
         'older cache': {
           [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
             cacheSize: 0,
             evictions: 0,
             expirations: 0,

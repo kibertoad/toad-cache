@@ -242,6 +242,8 @@ const alsoStatistics = cache.getStatistics()
       evictions: 5, // how many elements were evicted due to cache being at max capacity    
       expirations: 0, // how many elements were removed during get due to their ttl being exceeded
       hits: 0, // how many times element was successfully retrieved from cache during get
+      emptyHits: 0, // out of all hits, how many were null, undefined or ''?
+      falsyHits: 0, // out of all hits, how many were falsy?      
       misses: 1, // how many times element was not in cache or expired during get
     },
   },

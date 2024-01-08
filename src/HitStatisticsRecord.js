@@ -8,6 +8,8 @@ export class HitStatisticsRecord {
       [currentTimeStamp]: {
         cacheSize: 0,
         hits: 0,
+        falsyHits: 0,
+        emptyHits: 0,
         misses: 0,
         expirations: 0,
         evictions: 0,
@@ -20,6 +22,8 @@ export class HitStatisticsRecord {
       this.records[cacheId][key] = {
         cacheSize: 0,
         hits: 0,
+        falsyHits: 0,
+        emptyHits: 0,
         misses: 0,
         expirations: 0,
         evictions: 0,
