@@ -53,6 +53,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 1,
             hits: 3,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })
@@ -74,6 +76,37 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 0,
             misses: 1,
+            invalidateAll: 0,
+            invalidateOne: 0,
+          },
+        },
+      })
+    })
+
+    it('registers invalidations', async () => {
+      cache1 = new LruObjectHitStatistics(10, 500, 'cache 1')
+      cache1.set('dummy1', 1)
+      cache1.set('dummy2', 2)
+      cache1.set('dummy3', 3)
+      cache1.set('dummy4', 4)
+      cache1.set('dummy5', 5)
+
+      cache1.delete('dummy1')
+      cache1.delete('dummy2')
+      cache1.clear()
+
+      expect(cache1.getStatistics()).toEqual({
+        'cache 1': {
+          [timestamp]: {
+            emptyHits: 0,
+            falsyHits: 0,
+            cacheSize: 0,
+            evictions: 0,
+            expirations: 0,
+            hits: 0,
+            misses: 0,
+            invalidateAll: 1,
+            invalidateOne: 2,
           },
         },
       })
@@ -94,6 +127,8 @@ describe('LruObjectHitStatistics', function () {
             emptyHits: 0,
             hits: 1,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })
@@ -114,6 +149,8 @@ describe('LruObjectHitStatistics', function () {
             emptyHits: 1,
             hits: 1,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })
@@ -139,6 +176,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 0,
             misses: 1,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })
@@ -166,6 +205,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 100,
             hits: 100,
             misses: 100,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       }
@@ -184,6 +225,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 0,
             misses: 1,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })
@@ -209,6 +252,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 0,
             misses: 1,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
         'cache 2': {
@@ -220,6 +265,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 1,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
         'older cache': {
@@ -231,6 +278,8 @@ describe('LruObjectHitStatistics', function () {
             expirations: 0,
             hits: 0,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       }

@@ -31,13 +31,29 @@ export class LruObjectHitStatistics extends LruObject {
     this.hitStatistics.setCacheSize(this.size)
   }
 
+  delete(key, isExpiration = false) {
+    super.delete(key)
+
+    if (!isExpiration) {
+      this.hitStatistics.addInvalidateOne()
+    }
+    this.hitStatistics.setCacheSize(this.size)
+  }
+
+  clear() {
+    super.clear()
+
+    this.hitStatistics.addInvalidateAll()
+    this.hitStatistics.setCacheSize(this.size)
+  }
+
   get(key) {
     if (Object.prototype.hasOwnProperty.call(this.items, key)) {
       const item = this.items[key]
 
       // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
-        this.delete(key)
+        this.delete(key, true)
         this.hitStatistics.addExpiration()
         this.hitStatistics.setCacheSize(this.size)
         return

@@ -21,6 +21,8 @@ describe('HitStatisticsRecord', () => {
           emptyHits: 0,
           falsyHits: 0,
           misses: 100,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       }
 
@@ -33,6 +35,8 @@ describe('HitStatisticsRecord', () => {
           emptyHits: 0,
           falsyHits: 0,
           misses: 200,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       }
 
@@ -48,6 +52,8 @@ describe('HitStatisticsRecord', () => {
             emptyHits: 0,
             falsyHits: 0,
             misses: 100,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
         cache2: {
@@ -59,6 +65,8 @@ describe('HitStatisticsRecord', () => {
             emptyHits: 0,
             falsyHits: 0,
             misses: 0,
+            invalidateAll: 0,
+            invalidateOne: 0,
           },
         },
       })

@@ -110,6 +110,8 @@ export class HitStatisticsRecord {
         emptyHits: number,
         falsyHits: number,
         misses: number,
+        invalidateAll: number,
+        invalidateOne: number,
         cacheSize: number,
     }>>
 
