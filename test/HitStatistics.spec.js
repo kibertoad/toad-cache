@@ -28,6 +28,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 2,
           misses: 0,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
     })
@@ -46,6 +48,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 1,
           misses: 0,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
     })
@@ -72,6 +76,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 2,
           misses: 0,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
       cache2: {
@@ -83,6 +89,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 0,
           misses: 2,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
     })
@@ -103,6 +111,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 1,
           misses: 0,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
       cache2: {
@@ -114,6 +124,8 @@ describe('HitStatistics', () => {
           expirations: 0,
           hits: 0,
           misses: 1,
+          invalidateAll: 0,
+          invalidateOne: 0,
         },
       },
     })
