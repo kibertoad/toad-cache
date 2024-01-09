@@ -15,7 +15,7 @@ export class HitStatistics {
 
   get currentRecord() {
     // safety net
-    /* c8 ignore next 13 */
+    /* c8 ignore next 14 */
     if (!this.records.records[this.cacheId][this.currentTimeStamp]) {
       this.records.records[this.cacheId][this.currentTimeStamp] = {
         cacheSize: 0,
@@ -25,6 +25,7 @@ export class HitStatistics {
         misses: 0,
         expirations: 0,
         evictions: 0,
+        sets: 0,
         invalidateOne: 0,
         invalidateAll: 0,
       }
@@ -69,6 +70,11 @@ export class HitStatistics {
   addExpiration() {
     this.archiveIfNeeded()
     this.currentRecord.expirations++
+  }
+
+  addSet() {
+    this.archiveIfNeeded()
+    this.currentRecord.sets++
   }
 
   addInvalidateOne() {

@@ -30,6 +30,7 @@ describe('HitStatistics', () => {
           misses: 0,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
     })
@@ -50,6 +51,7 @@ describe('HitStatistics', () => {
           misses: 0,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
     })
@@ -78,6 +80,7 @@ describe('HitStatistics', () => {
           misses: 0,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
       cache2: {
@@ -91,6 +94,7 @@ describe('HitStatistics', () => {
           misses: 2,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
     })
@@ -113,6 +117,7 @@ describe('HitStatistics', () => {
           misses: 0,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
       cache2: {
@@ -126,6 +131,7 @@ describe('HitStatistics', () => {
           misses: 1,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       },
     })
