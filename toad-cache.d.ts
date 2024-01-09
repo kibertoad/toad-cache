@@ -113,6 +113,7 @@ export class HitStatisticsRecord {
         invalidateAll: number,
         invalidateOne: number,
         cacheSize: number,
+        sets: number,
     }>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void

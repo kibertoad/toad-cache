@@ -15,6 +15,7 @@ export class HitStatisticsRecord {
         evictions: 0,
         invalidateOne: 0,
         invalidateAll: 0,
+        sets: 0,
       },
     }
   }
@@ -31,6 +32,7 @@ export class HitStatisticsRecord {
         evictions: 0,
         invalidateOne: 0,
         invalidateAll: 0,
+        sets: 0,
       }
     }
   }

@@ -22,6 +22,7 @@ export class LruObjectHitStatistics extends LruObject {
 
   set(key, value) {
     super.set(key, value)
+    this.hitStatistics.addSet()
     this.hitStatistics.setCacheSize(this.size)
   }
 

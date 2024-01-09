@@ -23,6 +23,7 @@ describe('HitStatisticsRecord', () => {
           misses: 100,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       }
 
@@ -37,6 +38,7 @@ describe('HitStatisticsRecord', () => {
           misses: 200,
           invalidateAll: 0,
           invalidateOne: 0,
+          sets: 0,
         },
       }
 
@@ -54,6 +56,7 @@ describe('HitStatisticsRecord', () => {
             misses: 100,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
         cache2: {
@@ -67,6 +70,7 @@ describe('HitStatisticsRecord', () => {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       })

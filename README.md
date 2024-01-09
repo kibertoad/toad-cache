@@ -246,7 +246,8 @@ const alsoStatistics = cache.getStatistics()
       falsyHits: 0, // out of all hits, how many were falsy?      
       misses: 1, // how many times element was not in cache or expired during get
       invalidateOne: 1, // how many times element was invalidated individually
-      invalidateAll: 2, // how many times entire cache was invalidated      
+      invalidateAll: 2, // how many times entire cache was invalidated
+      sets: 0, // how many times new element was added      
     },
   },
 }

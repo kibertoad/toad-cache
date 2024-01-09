@@ -55,6 +55,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 6,
           },
         },
       })
@@ -78,6 +79,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 1,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       })
@@ -107,6 +109,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 1,
             invalidateOne: 2,
+            sets: 5,
           },
         },
       })
@@ -129,6 +132,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 1,
           },
         },
       })
@@ -151,6 +155,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 1,
           },
         },
       })
@@ -178,6 +183,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 1,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       })
@@ -207,6 +213,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 100,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       }
@@ -227,6 +234,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 1,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       })
@@ -254,6 +262,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 1,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
         'cache 2': {
@@ -267,6 +276,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 1,
           },
         },
         'older cache': {
@@ -280,6 +290,7 @@ describe('LruObjectHitStatistics', function () {
             misses: 0,
             invalidateAll: 0,
             invalidateOne: 0,
+            sets: 0,
           },
         },
       }
