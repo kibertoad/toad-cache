@@ -1,9 +1,9 @@
 import { FifoMap } from './src/FifoMap.js'
+import { FifoObject } from './src/FifoObject.js'
+import { HitStatisticsRecord } from './src/HitStatisticsRecord.js'
 import { LruMap } from './src/LruMap.js'
 import { LruObject } from './src/LruObject.js'
 import { LruObjectHitStatistics } from './src/LruObjectHitStatistics.js'
-import { FifoObject } from './src/FifoObject.js'
-import { HitStatisticsRecord } from './src/HitStatisticsRecord.js'
 
 export { FifoObject }
 export { FifoMap }
