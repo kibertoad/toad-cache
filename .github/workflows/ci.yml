@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: npm run rollup
 
-      - name: Run Tests
+      - name: Run Tests and Linting
         run: npm run test:ci
 
   automerge:

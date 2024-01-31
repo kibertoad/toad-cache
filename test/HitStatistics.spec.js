@@ -1,5 +1,5 @@
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest'
 import { HitStatistics } from '../src/HitStatistics.js'
-import { it, describe, expect, beforeEach, afterEach, vitest } from 'vitest'
 import { HitStatisticsRecord } from '../src/HitStatisticsRecord.js'
 
 describe('HitStatistics', () => {

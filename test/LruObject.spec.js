@@ -1,13 +1,13 @@
 import assert from 'node:assert'
-import { it, describe, beforeEach, expect } from 'vitest'
+import { setTimeout } from 'timers/promises'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { LruObject } from '../src/LruObject.js'
 import { items, populateCache } from './utils/cachePopulator.js'
-import { setTimeout } from 'timers/promises'
 
-describe('LruObject', function () {
+describe('LruObject', () => {
   let cache
 
-  beforeEach(function () {
+  beforeEach(() => {
     cache = new LruObject(4)
     populateCache(cache)
   })
@@ -33,7 +33,7 @@ describe('LruObject', function () {
   })
 
   describe('evict', () => {
-    it('It should evict', function () {
+    it('It should evict', () => {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(4)
@@ -143,7 +143,7 @@ describe('LruObject', function () {
   })
 
   describe('delete', () => {
-    it('It should delete', function () {
+    it('It should delete', () => {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(4)
@@ -193,7 +193,7 @@ describe('LruObject', function () {
   })
 
   describe('deleteMany', () => {
-    it('It should delete', function () {
+    it('It should delete', () => {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(4)
@@ -240,7 +240,7 @@ describe('LruObject', function () {
   })
 
   describe('core', () => {
-    it('It should handle a small evict', function () {
+    it('It should handle a small evict', () => {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 4, "Should be '4'")
@@ -276,7 +276,7 @@ describe('LruObject', function () {
       assert.strictEqual(cache.size, 2, "Should be '2'")
     })
 
-    it('It should handle an empty evict', function () {
+    it('It should handle an empty evict', () => {
       cache = new LruObject(1)
       assert.strictEqual(cache.first, null, "Should be 'null'")
       assert.strictEqual(cache.last, null, "Should be 'null'")

@@ -1,13 +1,13 @@
 import assert from 'node:assert'
-import { it, describe, beforeEach, expect } from 'vitest'
+import { setTimeout } from 'timers/promises'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { FifoObject } from '../src/FifoObject.js'
 import { items, populateCache } from './utils/cachePopulator.js'
-import { setTimeout } from 'timers/promises'
 
-describe('FifoObject', function () {
+describe('FifoObject', () => {
   let cache
 
-  beforeEach(function () {
+  beforeEach(() => {
     cache = new FifoObject(4)
     populateCache(cache)
   })
@@ -33,7 +33,7 @@ describe('FifoObject', function () {
   })
 
   describe('evict', () => {
-    it('It should evict', function () {
+    it('It should evict', () => {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
       expect(cache.size).toBe(4)
@@ -115,7 +115,7 @@ describe('FifoObject', function () {
   })
 
   describe('delete', () => {
-    it('It should delete', function () {
+    it('It should delete', () => {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 4, "Should be '4'")
@@ -165,7 +165,7 @@ describe('FifoObject', function () {
   })
 
   describe('deleteMany', () => {
-    it('It should delete', function () {
+    it('It should delete', () => {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 4, "Should be '4'")
@@ -211,7 +211,7 @@ describe('FifoObject', function () {
   })
 
   describe('core', () => {
-    it('It should handle a small evict', function () {
+    it('It should handle a small evict', () => {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
       assert.strictEqual(cache.size, 4, "Should be '4'")
@@ -247,7 +247,7 @@ describe('FifoObject', function () {
       assert.strictEqual(cache.size, 2, "Should be '2'")
     })
 
-    it('It should handle an empty evict', function () {
+    it('It should handle an empty evict', () => {
       cache = new FifoObject(1)
       assert.strictEqual(cache.first, null, "Should be 'null'")
       assert.strictEqual(cache.last, null, "Should be 'null'")
@@ -258,7 +258,7 @@ describe('FifoObject', function () {
       assert.strictEqual(cache.size, 0, "Should be 'null'")
     })
 
-    it('It should expose expiration time', function () {
+    it('It should expose expiration time', () => {
       cache = new FifoObject(1, 6e4)
       cache.set(items[0], false)
       assert.strictEqual(typeof cache.expiresAt(items[0]), 'number', 'Should be a number')

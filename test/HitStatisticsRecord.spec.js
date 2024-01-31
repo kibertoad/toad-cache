@@ -1,6 +1,6 @@
+import { describe, expect, it } from 'vitest'
 import { HitStatisticsRecord } from '../src/HitStatisticsRecord.js'
 import { getTimestamp } from '../src/utils/dateUtils.js'
-import { it, describe, expect } from 'vitest'
 
 describe('HitStatisticsRecord', () => {
   describe('resetForCache', () => {

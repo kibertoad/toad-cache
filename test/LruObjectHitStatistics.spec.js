@@ -1,13 +1,13 @@
-import { describe, expect, it } from 'vitest'
-import { items, populateCache } from './utils/cachePopulator.js'
-import { LruObjectHitStatistics } from '../src/LruObjectHitStatistics.js'
 import { setTimeout } from 'timers/promises'
+import { describe, expect, it } from 'vitest'
 import { HitStatisticsRecord } from '../src/HitStatisticsRecord.js'
+import { LruObjectHitStatistics } from '../src/LruObjectHitStatistics.js'
 import { getTimestamp } from '../src/utils/dateUtils.js'
+import { items, populateCache } from './utils/cachePopulator.js'
 
 const timestamp = getTimestamp(new Date())
 
-describe('LruObjectHitStatistics', function () {
+describe('LruObjectHitStatistics', () => {
   let cache1
 
   describe('constructor validations', () => {

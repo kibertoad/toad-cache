@@ -1,9 +1,9 @@
-import { Lru } from './dist/toad-cache.mjs'
 import { precise } from 'precise'
+import { Lru } from './dist/toad-cache.mjs'
 
-const nth = 2e3,
-  cache = new Lru(nth),
-  data = new Array(nth)
+const nth = 2e3
+const cache = new Lru(nth)
+const data = new Array(nth)
 
 function seed() {
   let i = -1
@@ -40,7 +40,9 @@ function bench(n = 0, x = 1, type = 'set') {
     populate(cache, n)
     timer.stop()
     console.log(
-      `Run ${x} ${x === 1 ? 'Set' : 'Evict'} (${n === 0 ? 'Low Keys' : 'High Keys'}): ${timer.diff() / 1e6} ms`,
+      `Run ${x} ${x === 1 ? 'Set' : 'Evict'} (${n === 0 ? 'Low Keys' : 'High Keys'}): ${
+        timer.diff() / 1e6
+      } ms`,
     )
   } else if (type === 'get') {
     const timer = precise().start()

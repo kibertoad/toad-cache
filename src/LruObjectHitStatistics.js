@@ -1,5 +1,5 @@
-import { LruObject } from './LruObject.js'
 import { HitStatistics } from './HitStatistics.js'
+import { LruObject } from './LruObject.js'
 
 export class LruObjectHitStatistics extends LruObject {
   constructor(max, ttlInMsecs, cacheId, globalStatisticsRecord, statisticTtlInHours) {
