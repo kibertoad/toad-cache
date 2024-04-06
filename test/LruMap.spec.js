@@ -1,5 +1,5 @@
 import assert from 'node:assert'
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { LruMap } from '../src/LruMap.js'
 import { items, populateCache } from './utils/cachePopulator.js'
