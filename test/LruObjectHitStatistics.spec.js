@@ -1,4 +1,4 @@
-import { setTimeout } from 'timers/promises'
+import { setTimeout } from 'node:timers/promises'
 import { describe, expect, it } from 'vitest'
 import { HitStatisticsRecord } from '../src/HitStatisticsRecord.js'
 import { LruObjectHitStatistics } from '../src/LruObjectHitStatistics.js'
