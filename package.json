@@ -54,13 +54,13 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "@vitest/coverage-v8": "^1.2.2",
+    "@vitest/coverage-v8": "^2.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "auto-changelog": "^2.4.0",
     "del-cli": "^5.1.0",
     "precise": "^4.0.0",
     "rollup": "^4.6.0",
-    "vitest": "^1.2.2",
+    "vitest": "^2.0.1",
     "tsd": "^0.31.0",
     "typescript": "^5.3.3"
   },
