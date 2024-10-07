@@ -57,7 +57,7 @@
     "@vitest/coverage-v8": "^2.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "auto-changelog": "^2.4.0",
-    "del-cli": "^5.1.0",
+    "del-cli": "^6.0.0",
     "precise": "^4.0.0",
     "rollup": "^4.6.0",
     "vitest": "^2.0.1",
