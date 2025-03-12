@@ -1,4 +1,3 @@
-import terser from "@rollup/plugin-terser";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const pkg = require("./package.json");

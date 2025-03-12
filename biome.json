@@ -5,7 +5,7 @@
 			"arrowParentheses": "always",
 			"indentStyle": "space",
 			"semicolons": "asNeeded",
-			"trailingComma": "all",
+			"trailingCommas": "all",
 			"lineWidth": 100,
 			"quoteStyle": "single"
 		}
