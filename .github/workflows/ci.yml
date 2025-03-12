@@ -11,6 +11,9 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: read
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,15 +25,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           always-auth: false
+          check-latest: true
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --ignore-scripts
 
       - name: Build
         run: npm run rollup
@@ -40,6 +45,9 @@ jobs:
 
   automerge:
     needs: build
+    if: >
+        github.event_name == 'pull_request' &&
+        github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
