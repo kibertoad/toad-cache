@@ -60,7 +60,7 @@
     "precise": "^4.0.3",
     "rollup": "^4.35.0",
     "tsd": "^0.32.0",
-    "typescript": "~5.8.2",
+    "typescript": "~5.9.2",
     "vitest": "^3.0.8"
   },
   "keywords": [
