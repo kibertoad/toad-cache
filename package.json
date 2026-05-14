@@ -38,19 +38,27 @@
     "node": ">=20"
   },
   "engineStrict": true,
+  "packageManager": "pnpm@11.1.1",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=20",
+      "onFail": "error"
+    }
+  },
   "scripts": {
-    "build": "del-cli dist && del-cli coverage && npm run rollup",
-    "benchmark": "npm run build && node benchmark.js",
+    "build": "del-cli dist && del-cli coverage && pnpm run rollup",
+    "benchmark": "pnpm run build && node benchmark.js",
     "changelog": "auto-changelog -p",
     "lint": "biome lint index.js benchmark.js src test biome.json",
     "lint:fix": "biome check --apply index.js benchmark.js src test biome.json",
     "rollup": "rollup --config",
     "test": "vitest",
-    "test:coverage": "npm run rollup && npm run test -- --coverage",
-    "test:ci": "npm run lint && npm run test:coverage && npm run test:typescript",
+    "test:coverage": "pnpm run rollup && pnpm run test -- --coverage",
+    "test:ci": "pnpm run lint && pnpm run test:coverage && pnpm run test:typescript",
     "test:typescript": "tsd",
-    "types:generate": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",
-    "prepublishOnly": "npm run build"
+    "types:generate": "pnpm exec tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",
+    "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
