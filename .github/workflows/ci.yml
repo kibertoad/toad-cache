@@ -30,21 +30,25 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           always-auth: false
           check-latest: true
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install --ignore-scripts
+        run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Build
-        run: npm run rollup
+        run: pnpm run rollup
 
       - name: Run Tests and Linting
-        run: npm run test:ci
+        run: pnpm run test:ci
 
   automerge:
     needs: build

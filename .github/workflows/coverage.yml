@@ -29,18 +29,22 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
           always-auth: false
           check-latest: true
           node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm install --ignore-scripts
+        run: pnpm install --ignore-scripts --frozen-lockfile
 
       - name: Run Tests
-        run: npm run test:coverage
+        run: pnpm run test:coverage
 
       - name: Coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # v2.3.6
