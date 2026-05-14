@@ -57,7 +57,7 @@
     "test:coverage": "pnpm run rollup && pnpm run test -- --coverage",
     "test:ci": "pnpm run lint && pnpm run test:coverage && pnpm run test:typescript",
     "test:typescript": "tsd",
-    "types:generate": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",
+    "types:generate": "pnpm exec tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
