@@ -25,7 +25,8 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.event.pull_request.base.ref }}
+          persist-credentials: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
@@ -62,10 +63,13 @@ jobs:
       - name: Bump version
         env:
           VERSION_BUMP: ${{ steps.version.outputs.bump }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
           pnpm version "$VERSION_BUMP" -m "chore: release v%s"
-          git push
-          git push --tags
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push "$REMOTE" "HEAD:${BASE_REF}"
+          git push "$REMOTE" --tags
 
       - name: Publish to npm
         run: pnpm publish --access public --provenance --no-git-checks
