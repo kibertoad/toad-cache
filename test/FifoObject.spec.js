@@ -64,6 +64,10 @@ describe('FifoObject', () => {
   })
 
   describe('get', () => {
+    it('returns undefined for a missing key', () => {
+      expect(cache.get('missing')).toBeUndefined()
+    })
+
     it('deletes expired entries', async () => {
       cache = new FifoObject(4, 500)
       populateCache(cache)
@@ -115,6 +119,12 @@ describe('FifoObject', () => {
   })
 
   describe('delete', () => {
+    it('is a no-op for a missing key', () => {
+      const sizeBefore = cache.size
+      cache.delete('missing')
+      expect(cache.size).toBe(sizeBefore)
+    })
+
     it('It should delete', () => {
       assert.strictEqual(cache.first.key, 'b', "Should be 'b'")
       assert.strictEqual(cache.last.key, 'e', "Should be 'e'")
