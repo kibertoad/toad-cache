@@ -54,7 +54,7 @@
     "lint:fix": "biome check --apply index.js benchmark.js src test biome.json",
     "rollup": "rollup --config",
     "test": "vitest",
-    "test:coverage": "pnpm run rollup && pnpm run test -- --coverage",
+    "test:coverage": "pnpm run rollup && vitest --coverage",
     "test:ci": "pnpm run lint && pnpm run test:coverage && pnpm run test:typescript",
     "test:typescript": "tsd",
     "types:generate": "pnpm exec tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir .",

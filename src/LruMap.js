@@ -40,6 +40,7 @@ export class LruMap {
       prev.next = next
     }
 
+    /* v8 ignore next 3 -- next is always non-null here: the early return above guarantees item !== this.last in a well-formed list */
     if (next !== null) {
       next.prev = prev
     }

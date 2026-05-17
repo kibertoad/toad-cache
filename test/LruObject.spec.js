@@ -64,6 +64,10 @@ describe('LruObject', () => {
   })
 
   describe('get', () => {
+    it('returns undefined for a missing key', () => {
+      expect(cache.get('missing')).toBeUndefined()
+    })
+
     it('deletes expired entries', async () => {
       cache = new LruObject(4, 500)
       populateCache(cache)
@@ -143,6 +147,12 @@ describe('LruObject', () => {
   })
 
   describe('delete', () => {
+    it('is a no-op for a missing key', () => {
+      const sizeBefore = cache.size
+      cache.delete('missing')
+      expect(cache.size).toBe(sizeBefore)
+    })
+
     it('It should delete', () => {
       expect(cache.first.key).toBe('b')
       expect(cache.last.key).toBe('e')
