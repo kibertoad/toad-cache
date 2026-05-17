@@ -13,14 +13,14 @@
 	"linter": {
 		"rules": {
 			"style": {
-				"useConst": "off",
-				"noVar": "off"
+				"useConst": "off"
 			},
 			"correctness": {
 				"noInnerDeclarations": "off"
 			},
 			"suspicious": {
-				"noGlobalIsNan": "off"
+				"noGlobalIsNan": "off",
+				"noVar": "off"
 			},
 			"complexity": {
 				"useLiteralKeys": "off"
