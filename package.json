@@ -6,7 +6,7 @@
   "author": "Igor Savin <kibertoad@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/kibertoad/toad-cache.git"
+    "url": "git+https://github.com/kibertoad/toad-cache.git"
   },
   "bugs": {
     "url": "https://github.com/kibertoad/toad-cache/issues"

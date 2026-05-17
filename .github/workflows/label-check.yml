@@ -1,0 +1,36 @@
+---
+name: label-check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  enforce-release-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require a release label
+        env:
+          LABELS: ${{ toJson(github.event.pull_request.labels.*.name) }}
+        run: |
+          echo "PR labels: $LABELS"
+          case "$LABELS" in
+            *'"patch"'*|*'"minor"'*|*'"major"'*|*'"skip-release"'*)
+              echo "Required release label is set."
+              ;;
+            *)
+              echo "::error::PR must have one of these labels: patch, minor, major, skip-release"
+              exit 1
+              ;;
+          esac
