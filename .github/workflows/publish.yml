@@ -60,15 +60,23 @@ jobs:
           fi
 
       - name: Bump version
+        id: bump
         env:
           VERSION_BUMP: ${{ steps.version.outputs.bump }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          pnpm version "$VERSION_BUMP" -m "chore: release v%s"
+          NEW_VERSION=$(pnpm version "$VERSION_BUMP" -m "chore: release v%s")
+          echo "tag=${NEW_VERSION}" >> $GITHUB_OUTPUT
           REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push "$REMOTE" "HEAD:${BASE_REF}"
           git push "$REMOTE" --tags
 
       - name: Publish to npm
         run: pnpm publish --access public --provenance --no-git-checks
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ steps.bump.outputs.tag }}
+        run: gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --generate-notes
