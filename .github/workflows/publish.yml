@@ -66,7 +66,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: |
-          NEW_VERSION=$(pnpm version "$VERSION_BUMP" -m "chore: release v%s")
+          pnpm version "$VERSION_BUMP" -m "chore: release v%s"
+          NEW_VERSION="v$(node -p "require('./package.json').version")"
           echo "tag=${NEW_VERSION}" >> $GITHUB_OUTPUT
           REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push "$REMOTE" "HEAD:${BASE_REF}"
