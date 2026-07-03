@@ -33,6 +33,11 @@ describe('FifoMap', () => {
     it('throws on numeric string ttl', () => {
       expect(() => new FifoMap(100, '100')).to.throw(/Invalid ttl value/)
     })
+
+    it('throws on non-integer ttl', () => {
+      expect(() => new FifoMap(100, 2.5)).to.throw(/Invalid ttl value/)
+      expect(() => new FifoMap(100, Number.POSITIVE_INFINITY)).to.throw(/Invalid ttl value/)
+    })
   })
 
   describe('clear', () => {

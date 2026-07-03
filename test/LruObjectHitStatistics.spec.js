@@ -28,6 +28,16 @@ describe('LruObjectHitStatistics', () => {
       expect(cache.max).toBe(0)
     })
 
+    it('applies default max when omitted', () => {
+      const cache = new LruObjectHitStatistics(undefined, undefined, 'cache')
+      expect(cache.max).toBe(1000)
+      expect(cache.ttl).toBe(0)
+    })
+
+    it('rejects nullish max the same way as the base class', () => {
+      expect(() => new LruObjectHitStatistics(null, 0, 'cache')).to.throw(/Invalid max value/)
+    })
+
     it('does not evict with explicit 0 as unlimited max', () => {
       const record = new HitStatisticsRecord()
       const cache = new LruObjectHitStatistics(0, 0, 'cache', record)

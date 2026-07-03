@@ -1,12 +1,8 @@
+import { validateCacheParams } from './utils/validation.js'
+
 export class LruMap {
   constructor(max = 1000, ttlInMsecs = 0) {
-    if (typeof max !== 'number' || !Number.isInteger(max) || max < 0) {
-      throw new Error('Invalid max value')
-    }
-
-    if (typeof ttlInMsecs !== 'number' || Number.isNaN(ttlInMsecs) || ttlInMsecs < 0) {
-      throw new Error('Invalid ttl value')
-    }
+    validateCacheParams(max, ttlInMsecs)
 
     this.first = null
     this.items = new Map()

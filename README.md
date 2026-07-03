@@ -201,7 +201,7 @@ cache.size // 0 - it's a new cache!
 
 ### Property
 
-Milliseconds an item will remain in cache; lazy expiration upon next `get()` of an item
+Milliseconds an item will remain in cache; lazy expiration upon next `get()` of an item. Must be a non-negative integer; `0` disables expiration.
 
 **Example**
 
