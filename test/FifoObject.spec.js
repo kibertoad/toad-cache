@@ -20,6 +20,19 @@ describe('FifoObject', () => {
     it('throws on invalid ttl', () => {
       expect(() => new FifoObject(100, 'abc')).to.throw(/Invalid ttl value/)
     })
+
+    it('throws on non-integer max', () => {
+      expect(() => new FifoObject(2.5)).to.throw(/Invalid max value/)
+      expect(() => new FifoObject(Number.POSITIVE_INFINITY)).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string max', () => {
+      expect(() => new FifoObject('5')).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string ttl', () => {
+      expect(() => new FifoObject(100, '100')).to.throw(/Invalid ttl value/)
+    })
   })
 
   describe('clear', () => {

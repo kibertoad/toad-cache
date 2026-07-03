@@ -22,6 +22,24 @@ describe('LruObjectHitStatistics', () => {
     it('throws on no cacheId', () => {
       expect(() => new LruObjectHitStatistics(100, 123)).to.throw(/Cache id is mandatory/)
     })
+
+    it('supports explicit 0 as unlimited max', () => {
+      const cache = new LruObjectHitStatistics(0, 0, 'cache')
+      expect(cache.max).toBe(0)
+    })
+  })
+
+  describe('no-op operations', () => {
+    it('does not register invalidations or evictions when nothing is removed', () => {
+      const record = new HitStatisticsRecord()
+      const cache = new LruObjectHitStatistics(10, 0, 'cache', record)
+
+      cache.delete('missing key')
+      cache.evict()
+
+      expect(record.records.cache[timestamp].invalidateOne).toBe(0)
+      expect(record.records.cache[timestamp].evictions).toBe(0)
+    })
   })
 
   describe('get', () => {

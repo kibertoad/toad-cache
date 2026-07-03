@@ -20,6 +20,19 @@ describe('LruMap', () => {
     it('throws on invalid ttl', () => {
       expect(() => new LruMap(100, 'abc')).to.throw(/Invalid ttl value/)
     })
+
+    it('throws on non-integer max', () => {
+      expect(() => new LruMap(2.5)).to.throw(/Invalid max value/)
+      expect(() => new LruMap(Number.POSITIVE_INFINITY)).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string max', () => {
+      expect(() => new LruMap('5')).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string ttl', () => {
+      expect(() => new LruMap(100, '100')).to.throw(/Invalid ttl value/)
+    })
   })
 
   describe('clear', () => {

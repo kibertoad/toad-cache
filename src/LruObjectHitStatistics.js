@@ -3,7 +3,7 @@ import { LruObject } from './LruObject.js'
 
 export class LruObjectHitStatistics extends LruObject {
   constructor(max, ttlInMsecs, cacheId, globalStatisticsRecord, statisticTtlInHours) {
-    super(max || 1000, ttlInMsecs || 0)
+    super(max ?? 1000, ttlInMsecs ?? 0)
 
     if (!cacheId) {
       throw new Error('Cache id is mandatory')
@@ -27,15 +27,19 @@ export class LruObjectHitStatistics extends LruObject {
   }
 
   evict() {
+    const hadItems = this.size > 0
     super.evict()
-    this.hitStatistics.addEviction()
+    if (hadItems) {
+      this.hitStatistics.addEviction()
+    }
     this.hitStatistics.setCacheSize(this.size)
   }
 
   delete(key, isExpiration = false) {
+    const existed = Object.prototype.hasOwnProperty.call(this.items, key)
     super.delete(key)
 
-    if (!isExpiration) {
+    if (existed && !isExpiration) {
       this.hitStatistics.addInvalidateOne()
     }
     this.hitStatistics.setCacheSize(this.size)

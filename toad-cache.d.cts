@@ -8,6 +8,19 @@ type CacheEntry<T> = {
     value: T
 }
 
+type CacheStatistics = {
+    expirations: number,
+    evictions: number,
+    hits: number,
+    emptyHits: number,
+    falsyHits: number,
+    misses: number,
+    invalidateAll: number,
+    invalidateOne: number,
+    cacheSize: number,
+    sets: number,
+}
+
 interface ToadCache<T> {
     first: any;
     last: any;
@@ -28,7 +41,7 @@ interface ToadCache<T> {
 declare class FifoMap<T> implements ToadCache<T>{
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, T>;
+    items: Map<any, CacheEntry<T>>;
     last: any;
     max: number;
     ttl: number;
@@ -66,7 +79,7 @@ declare class FifoObject<T> implements ToadCache<T> {
 declare class LruMap<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, T>;
+    items: Map<any, CacheEntry<T>>;
     last: any;
     max: number;
     ttl: number;
@@ -103,29 +116,22 @@ declare class LruObject<T> implements ToadCache<T> {
 }
 
 declare class HitStatisticsRecord {
-    records: Record<string, Record<string, {
-        expirations: number,
-        evictions: number,
-        hits: number,
-        emptyHits: number,
-        falsyHits: number,
-        misses: number,
-        invalidateAll: number,
-        invalidateOne: number,
-        cacheSize: number,
-        sets: number,
-    }>>
+    records: Record<string, Record<string, CacheStatistics>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void
     resetForCache(cacheId: string): void
+    getStatistics(): Record<string, Record<string, CacheStatistics>>
 }
 
 declare class LruObjectHitStatistics<T> extends LruObject<T>{
     constructor(max?: number, ttlInMsecs?: number, cacheId?: string, globalStatisticsRecord?: HitStatisticsRecord, statisticTtlInHours?: number);
+    getStatistics(): Record<string, Record<string, CacheStatistics>>
 }
 
 export {
     CacheConstructor,
+    CacheEntry,
+    CacheStatistics,
     ToadCache,
     LruObject,
     LruMap,

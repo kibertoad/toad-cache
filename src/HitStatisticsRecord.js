@@ -21,6 +21,10 @@ export class HitStatisticsRecord {
   }
 
   resetForCache(cacheId) {
+    if (!this.records[cacheId]) {
+      return
+    }
+
     for (let key of Object.keys(this.records[cacheId])) {
       this.records[cacheId][key] = {
         cacheSize: 0,
