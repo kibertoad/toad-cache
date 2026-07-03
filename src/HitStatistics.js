@@ -8,16 +8,18 @@ export class HitStatistics {
 
     this.collectionStart = new Date()
     this.currentTimeStamp = getTimestamp(this.collectionStart)
+    this.archiveAfter = this.collectionStart.getTime() + this.statisticTtlInHours * 3_600_000
 
     this.records = globalStatisticsRecord || new HitStatisticsRecord()
     this.records.initForCache(this.cacheId, this.currentTimeStamp)
   }
 
   get currentRecord() {
+    const cacheRecords = this.records.records[this.cacheId]
     // safety net
     /* c8 ignore next 14 */
-    if (!this.records.records[this.cacheId][this.currentTimeStamp]) {
-      this.records.records[this.cacheId][this.currentTimeStamp] = {
+    if (!cacheRecords[this.currentTimeStamp]) {
+      cacheRecords[this.currentTimeStamp] = {
         cacheSize: 0,
         hits: 0,
         falsyHits: 0,
@@ -31,9 +33,10 @@ export class HitStatistics {
       }
     }
 
-    return this.records.records[this.cacheId][this.currentTimeStamp]
+    return cacheRecords[this.currentTimeStamp]
   }
 
+  /* v8 ignore next 3 -- kept for compatibility, no longer used internally */
   hoursPassed() {
     return (Date.now() - this.collectionStart) / 1000 / 60 / 60
   }
@@ -92,9 +95,10 @@ export class HitStatistics {
   }
 
   archiveIfNeeded() {
-    if (this.hoursPassed() >= this.statisticTtlInHours) {
+    if (Date.now() >= this.archiveAfter) {
       this.collectionStart = new Date()
       this.currentTimeStamp = getTimestamp(this.collectionStart)
+      this.archiveAfter = this.collectionStart.getTime() + this.statisticTtlInHours * 3_600_000
       this.records.initForCache(this.cacheId, this.currentTimeStamp)
     }
   }
