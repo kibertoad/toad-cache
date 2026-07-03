@@ -3,7 +3,10 @@ import { LruObject } from './LruObject.js'
 
 export class LruObjectHitStatistics extends LruObject {
   constructor(max, ttlInMsecs, cacheId, globalStatisticsRecord, statisticTtlInHours) {
-    super(max || 1000, ttlInMsecs || 0)
+    // Pass through as-is: the base constructor applies the 1000/0 defaults for
+    // omitted (undefined) values and validates everything else, so explicit 0
+    // stays unlimited and null/NaN are rejected the same way as the base class.
+    super(max, ttlInMsecs)
 
     if (!cacheId) {
       throw new Error('Cache id is mandatory')
@@ -27,15 +30,19 @@ export class LruObjectHitStatistics extends LruObject {
   }
 
   evict() {
+    const hadItems = this.size > 0
     super.evict()
-    this.hitStatistics.addEviction()
+    if (hadItems) {
+      this.hitStatistics.addEviction()
+    }
     this.hitStatistics.setCacheSize(this.size)
   }
 
   delete(key, isExpiration = false) {
+    const existed = this.items[key] !== undefined
     super.delete(key)
 
-    if (!isExpiration) {
+    if (existed && !isExpiration) {
       this.hitStatistics.addInvalidateOne()
     }
     this.hitStatistics.setCacheSize(this.size)

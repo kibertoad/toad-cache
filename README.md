@@ -144,7 +144,7 @@ console.log(cache.keys())
 
 ### Property
 
-Max items to hold in cache (1000)
+Max items to hold in cache (1000). Must be a non-negative integer; `0` means no size limit.
 
 **Example**
 
@@ -201,7 +201,7 @@ cache.size // 0 - it's a new cache!
 
 ### Property
 
-Milliseconds an item will remain in cache; lazy expiration upon next `get()` of an item
+Milliseconds an item will remain in cache; lazy expiration upon next `get()` of an item. Must be a non-negative integer; `0` disables expiration.
 
 **Example**
 
@@ -211,6 +211,8 @@ const cache = new Lru()
 cache.ttl = 3e4
 ```
 
+Note: entries stored while `ttl` was `0` have no expiry timestamp, so enabling a TTL at runtime immediately expires them on their next `get()`. Prefer setting the TTL via the constructor.
+
 ## Hit/miss/expiration tracking
 
 In case you want to gather information on cache hit/miss/expiration ratio, as well as cache size and eviction statistics, you can use LruHitStatistics class:
@@ -218,13 +220,12 @@ In case you want to gather information on cache hit/miss/expiration ratio, as we
 ```js
 const sharedRecord = new HitStatisticsRecord() // if you want to use single record object for all of caches, create it manually and pass to each cache
 
-const cache = new LruHitStatistics({
-  cacheId: 'some-cache-id',
-  globalStatisticsRecord: sharedRecord,
-  statisticTtlInHours: 24, // how often to reset statistics. On every rotation previously accumulated data is removed
-  max: 1000,
-  ttlInMsecs: 0,
-})
+const max = 1000
+const ttlInMsecs = 0
+const cacheId = 'some-cache-id'
+const statisticTtlInHours = 24 // how often to reset statistics. On every rotation previously accumulated data is removed
+
+const cache = new LruHitStatistics(max, ttlInMsecs, cacheId, sharedRecord, statisticTtlInHours)
 ```
 
 You can retrieve accumulated statistics from the cache, or from the record directly:

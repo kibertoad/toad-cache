@@ -1,12 +1,8 @@
+import { validateCacheParams } from './utils/validation.js'
+
 export class FifoObject {
   constructor(max = 1000, ttlInMsecs = 0) {
-    if (isNaN(max) || max < 0) {
-      throw new Error('Invalid max value')
-    }
-
-    if (isNaN(ttlInMsecs) || ttlInMsecs < 0) {
-      throw new Error('Invalid ttl value')
-    }
+    validateCacheParams(max, ttlInMsecs)
 
     this.first = null
     this.items = Object.create(null)
@@ -117,7 +113,7 @@ export class FifoObject {
     }
 
     // Add new item
-    if (this.max > 0 && this.size === this.max) {
+    if (this.max > 0 && this.size >= this.max) {
       this.evict()
     }
 

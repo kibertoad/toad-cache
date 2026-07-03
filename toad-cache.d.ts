@@ -8,6 +8,19 @@ export type CacheEntry<T> = {
     value: T
 }
 
+export type CacheStatistics = {
+    expirations: number,
+    evictions: number,
+    hits: number,
+    emptyHits: number,
+    falsyHits: number,
+    misses: number,
+    invalidateAll: number,
+    invalidateOne: number,
+    cacheSize: number,
+    sets: number,
+}
+
 export interface ToadCache<T> {
     first: any;
     last: any;
@@ -28,7 +41,7 @@ export interface ToadCache<T> {
 export class FifoMap<T> implements ToadCache<T>{
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, T>;
+    items: Map<any, CacheEntry<T>>;
     last: any;
     max: number;
     ttl: number;
@@ -66,7 +79,7 @@ export class FifoObject<T> implements ToadCache<T> {
 export class LruMap<T> implements ToadCache<T> {
     constructor(max?: number, ttlInMsecs?: number);
     first: any;
-    items: Map<any, T>;
+    items: Map<any, CacheEntry<T>>;
     last: any;
     max: number;
     ttl: number;
@@ -103,25 +116,16 @@ export class LruObject<T> implements ToadCache<T> {
 }
 
 export class HitStatisticsRecord {
-    records: Record<string, Record<string, {
-        expirations: number,
-        evictions: number,
-        hits: number,
-        emptyHits: number,
-        falsyHits: number,
-        misses: number,
-        invalidateAll: number,
-        invalidateOne: number,
-        cacheSize: number,
-        sets: number,
-    }>>
+    records: Record<string, Record<string, CacheStatistics>>
 
     initForCache(cacheId: string, currentTimeStamp: string): void
     resetForCache(cacheId: string): void
+    getStatistics(): Record<string, Record<string, CacheStatistics>>
 }
 
 export class LruObjectHitStatistics<T> extends LruObject<T>{
     constructor(max?: number, ttlInMsecs?: number, cacheId?: string, globalStatisticsRecord?: HitStatisticsRecord, statisticTtlInHours?: number);
+    getStatistics(): Record<string, Record<string, CacheStatistics>>
 }
 
 export { FifoObject as Fifo }

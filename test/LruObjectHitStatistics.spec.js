@@ -22,6 +22,46 @@ describe('LruObjectHitStatistics', () => {
     it('throws on no cacheId', () => {
       expect(() => new LruObjectHitStatistics(100, 123)).to.throw(/Cache id is mandatory/)
     })
+
+    it('supports explicit 0 as unlimited max', () => {
+      const cache = new LruObjectHitStatistics(0, 0, 'cache')
+      expect(cache.max).toBe(0)
+    })
+
+    it('applies default max when omitted', () => {
+      const cache = new LruObjectHitStatistics(undefined, undefined, 'cache')
+      expect(cache.max).toBe(1000)
+      expect(cache.ttl).toBe(0)
+    })
+
+    it('rejects nullish max the same way as the base class', () => {
+      expect(() => new LruObjectHitStatistics(null, 0, 'cache')).to.throw(/Invalid max value/)
+    })
+
+    it('does not evict with explicit 0 as unlimited max', () => {
+      const record = new HitStatisticsRecord()
+      const cache = new LruObjectHitStatistics(0, 0, 'cache', record)
+
+      for (let i = 0; i < 1500; i++) {
+        cache.set(`key-${i}`, i)
+      }
+
+      expect(cache.size).toBe(1500)
+      expect(record.records.cache[timestamp].evictions).toBe(0)
+    })
+  })
+
+  describe('no-op operations', () => {
+    it('does not register invalidations or evictions when nothing is removed', () => {
+      const record = new HitStatisticsRecord()
+      const cache = new LruObjectHitStatistics(10, 0, 'cache', record)
+
+      cache.delete('missing key')
+      cache.evict()
+
+      expect(record.records.cache[timestamp].invalidateOne).toBe(0)
+      expect(record.records.cache[timestamp].evictions).toBe(0)
+    })
   })
 
   describe('get', () => {

@@ -1,5 +1,6 @@
 import { HitStatisticsRecord } from './HitStatisticsRecord.js'
 import { getTimestamp } from './utils/dateUtils.js'
+import { createEmptyStatisticsRecord } from './utils/statisticsRecord.js'
 
 export class HitStatistics {
   constructor(cacheId, statisticTtlInHours, globalStatisticsRecord) {
@@ -17,20 +18,9 @@ export class HitStatistics {
   get currentRecord() {
     const cacheRecords = this.records.records[this.cacheId]
     // safety net
-    /* c8 ignore next 14 */
+    /* c8 ignore next 3 */
     if (!cacheRecords[this.currentTimeStamp]) {
-      cacheRecords[this.currentTimeStamp] = {
-        cacheSize: 0,
-        hits: 0,
-        falsyHits: 0,
-        emptyHits: 0,
-        misses: 0,
-        expirations: 0,
-        evictions: 0,
-        sets: 0,
-        invalidateOne: 0,
-        invalidateAll: 0,
-      }
+      cacheRecords[this.currentTimeStamp] = createEmptyStatisticsRecord()
     }
 
     return cacheRecords[this.currentTimeStamp]

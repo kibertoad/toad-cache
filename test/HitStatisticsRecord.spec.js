@@ -4,6 +4,13 @@ import { getTimestamp } from '../src/utils/dateUtils.js'
 
 describe('HitStatisticsRecord', () => {
   describe('resetForCache', () => {
+    it('does nothing for an unknown cacheId', () => {
+      const record = new HitStatisticsRecord()
+
+      expect(() => record.resetForCache('unknown')).not.to.throw()
+      expect(record.records).toEqual({})
+    })
+
     it('resets for one cache', () => {
       const record = new HitStatisticsRecord()
       const currentTime = new Date(Date.now())

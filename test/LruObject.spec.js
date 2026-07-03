@@ -20,6 +20,24 @@ describe('LruObject', () => {
     it('throws on invalid ttl', () => {
       expect(() => new LruObject(100, 'abc')).to.throw(/Invalid ttl value/)
     })
+
+    it('throws on non-integer max', () => {
+      expect(() => new LruObject(2.5)).to.throw(/Invalid max value/)
+      expect(() => new LruObject(Number.POSITIVE_INFINITY)).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string max', () => {
+      expect(() => new LruObject('5')).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string ttl', () => {
+      expect(() => new LruObject(100, '100')).to.throw(/Invalid ttl value/)
+    })
+
+    it('throws on non-integer ttl', () => {
+      expect(() => new LruObject(100, 2.5)).to.throw(/Invalid ttl value/)
+      expect(() => new LruObject(100, Number.POSITIVE_INFINITY)).to.throw(/Invalid ttl value/)
+    })
   })
 
   describe('clear', () => {

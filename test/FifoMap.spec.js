@@ -20,6 +20,24 @@ describe('FifoMap', () => {
     it('throws on invalid ttl', () => {
       expect(() => new FifoMap(100, 'abc')).to.throw(/Invalid ttl value/)
     })
+
+    it('throws on non-integer max', () => {
+      expect(() => new FifoMap(2.5)).to.throw(/Invalid max value/)
+      expect(() => new FifoMap(Number.POSITIVE_INFINITY)).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string max', () => {
+      expect(() => new FifoMap('5')).to.throw(/Invalid max value/)
+    })
+
+    it('throws on numeric string ttl', () => {
+      expect(() => new FifoMap(100, '100')).to.throw(/Invalid ttl value/)
+    })
+
+    it('throws on non-integer ttl', () => {
+      expect(() => new FifoMap(100, 2.5)).to.throw(/Invalid ttl value/)
+      expect(() => new FifoMap(100, Number.POSITIVE_INFINITY)).to.throw(/Invalid ttl value/)
+    })
   })
 
   describe('clear', () => {
