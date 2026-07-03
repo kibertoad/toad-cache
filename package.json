@@ -61,15 +61,15 @@
     "prepublishOnly": "pnpm run build"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.15",
-    "@vitest/coverage-v8": "^4.1.6",
-    "auto-changelog": "^2.5.0",
+    "@biomejs/biome": "^2.5.2",
+    "@vitest/coverage-v8": "^4.1.9",
+    "auto-changelog": "^2.6.0",
     "del-cli": "^7.0.0",
     "precise": "^5.0.1",
-    "rollup": "^4.60.4",
+    "rollup": "^4.62.2",
     "tsd": "^0.33.0",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.9"
   },
   "keywords": [
     "LRU",
