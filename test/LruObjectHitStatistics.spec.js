@@ -27,6 +27,18 @@ describe('LruObjectHitStatistics', () => {
       const cache = new LruObjectHitStatistics(0, 0, 'cache')
       expect(cache.max).toBe(0)
     })
+
+    it('does not evict with explicit 0 as unlimited max', () => {
+      const record = new HitStatisticsRecord()
+      const cache = new LruObjectHitStatistics(0, 0, 'cache', record)
+
+      for (let i = 0; i < 1500; i++) {
+        cache.set(`key-${i}`, i)
+      }
+
+      expect(cache.size).toBe(1500)
+      expect(record.records.cache[timestamp].evictions).toBe(0)
+    })
   })
 
   describe('no-op operations', () => {
