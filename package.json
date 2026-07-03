@@ -1,7 +1,7 @@
 {
   "name": "toad-cache",
   "description": "LRU and FIFO caches for Client or Server",
-  "version": "3.7.1",
+  "version": "3.7.2",
   "homepage": "https://github.com/kibertoad/toad-cache",
   "author": "Igor Savin <kibertoad@gmail.com>",
   "repository": {
@@ -38,11 +38,11 @@
     "node": ">=20"
   },
   "engineStrict": true,
-  "packageManager": "pnpm@11.1.1",
+  "packageManager": "pnpm@11.9.0",
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": ">=20",
+      "version": ">=22.13",
       "onFail": "error"
     }
   },

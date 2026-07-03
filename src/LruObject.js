@@ -53,9 +53,9 @@ export class LruObject {
   }
 
   delete(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
+    const item = this.items[key]
 
+    if (item !== undefined) {
       delete this.items[key]
       this.size--
 
@@ -100,15 +100,17 @@ export class LruObject {
   }
 
   expiresAt(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      return this.items[key].expiry
+    const item = this.items[key]
+
+    if (item !== undefined) {
+      return item.expiry
     }
   }
 
   get(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
+    const item = this.items[key]
 
+    if (item !== undefined) {
       // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
@@ -122,10 +124,10 @@ export class LruObject {
   }
 
   getMany(keys) {
-    const result = []
+    const result = new Array(keys.length)
 
     for (var i = 0; i < keys.length; i++) {
-      result.push(this.get(keys[i]))
+      result[i] = this.get(keys[i])
     }
 
     return result
@@ -137,15 +139,12 @@ export class LruObject {
 
   set(key, value) {
     // Replace existing item
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
-      item.value = value
+    const existing = this.items[key]
 
-      item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
-
-      if (this.last !== item) {
-        this.bumpLru(item)
-      }
+    if (existing !== undefined) {
+      existing.value = value
+      existing.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
+      this.bumpLru(existing)
 
       return
     }

@@ -20,15 +20,15 @@ export class FifoMap {
   }
 
   clear() {
-    this.items = new Map()
+    this.items.clear()
     this.first = null
     this.last = null
   }
 
   delete(key) {
-    if (this.items.has(key)) {
-      const deletedItem = this.items.get(key)
+    const deletedItem = this.items.get(key)
 
+    if (deletedItem !== undefined) {
       this.items.delete(key)
 
       if (deletedItem.prev !== null) {
@@ -72,15 +72,17 @@ export class FifoMap {
   }
 
   expiresAt(key) {
-    if (this.items.has(key)) {
-      return this.items.get(key).expiry
+    const item = this.items.get(key)
+
+    if (item !== undefined) {
+      return item.expiry
     }
   }
 
   get(key) {
-    if (this.items.has(key)) {
-      const item = this.items.get(key)
+    const item = this.items.get(key)
 
+    if (item !== undefined) {
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
         return
@@ -91,10 +93,10 @@ export class FifoMap {
   }
 
   getMany(keys) {
-    const result = []
+    const result = new Array(keys.length)
 
     for (var i = 0; i < keys.length; i++) {
-      result.push(this.get(keys[i]))
+      result[i] = this.get(keys[i])
     }
 
     return result
@@ -106,11 +108,11 @@ export class FifoMap {
 
   set(key, value) {
     // Replace existing item
-    if (this.items.has(key)) {
-      const item = this.items.get(key)
-      item.value = value
+    const existing = this.items.get(key)
 
-      item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
+    if (existing !== undefined) {
+      existing.value = value
+      existing.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
 
       return
     }

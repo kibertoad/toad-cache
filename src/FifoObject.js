@@ -24,9 +24,9 @@ export class FifoObject {
   }
 
   delete(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const deletedItem = this.items[key]
+    const deletedItem = this.items[key]
 
+    if (deletedItem !== undefined) {
       delete this.items[key]
       this.size--
 
@@ -71,15 +71,17 @@ export class FifoObject {
   }
 
   expiresAt(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      return this.items[key].expiry
+    const item = this.items[key]
+
+    if (item !== undefined) {
+      return item.expiry
     }
   }
 
   get(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
+    const item = this.items[key]
 
+    if (item !== undefined) {
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
         return
@@ -90,10 +92,10 @@ export class FifoObject {
   }
 
   getMany(keys) {
-    const result = []
+    const result = new Array(keys.length)
 
     for (var i = 0; i < keys.length; i++) {
-      result.push(this.get(keys[i]))
+      result[i] = this.get(keys[i])
     }
 
     return result
@@ -105,11 +107,11 @@ export class FifoObject {
 
   set(key, value) {
     // Replace existing item
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
-      item.value = value
+    const existing = this.items[key]
 
-      item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
+    if (existing !== undefined) {
+      existing.value = value
+      existing.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
 
       return
     }

@@ -49,15 +49,15 @@ export class LruMap {
   }
 
   clear() {
-    this.items = new Map()
+    this.items.clear()
     this.first = null
     this.last = null
   }
 
   delete(key) {
-    if (this.items.has(key)) {
-      const item = this.items.get(key)
+    const item = this.items.get(key)
 
+    if (item !== undefined) {
       this.items.delete(key)
 
       if (item.prev !== null) {
@@ -101,15 +101,17 @@ export class LruMap {
   }
 
   expiresAt(key) {
-    if (this.items.has(key)) {
-      return this.items.get(key).expiry
+    const item = this.items.get(key)
+
+    if (item !== undefined) {
+      return item.expiry
     }
   }
 
   get(key) {
-    if (this.items.has(key)) {
-      const item = this.items.get(key)
+    const item = this.items.get(key)
 
+    if (item !== undefined) {
       // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key)
@@ -123,10 +125,10 @@ export class LruMap {
   }
 
   getMany(keys) {
-    const result = []
+    const result = new Array(keys.length)
 
     for (var i = 0; i < keys.length; i++) {
-      result.push(this.get(keys[i]))
+      result[i] = this.get(keys[i])
     }
 
     return result
@@ -138,15 +140,12 @@ export class LruMap {
 
   set(key, value) {
     // Replace existing item
-    if (this.items.has(key)) {
-      const item = this.items.get(key)
-      item.value = value
+    const existing = this.items.get(key)
 
-      item.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
-
-      if (this.last !== item) {
-        this.bumpLru(item)
-      }
+    if (existing !== undefined) {
+      existing.value = value
+      existing.expiry = this.ttl > 0 ? Date.now() + this.ttl : this.ttl
+      this.bumpLru(existing)
 
       return
     }
