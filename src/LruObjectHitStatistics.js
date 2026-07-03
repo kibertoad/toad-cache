@@ -49,9 +49,9 @@ export class LruObjectHitStatistics extends LruObject {
   }
 
   get(key) {
-    if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-      const item = this.items[key]
+    const item = this.items[key]
 
+    if (item !== undefined) {
       // Item has already expired
       if (this.ttl > 0 && item.expiry <= Date.now()) {
         this.delete(key, true)
@@ -63,9 +63,10 @@ export class LruObjectHitStatistics extends LruObject {
       this.bumpLru(item)
       if (!item.value) {
         this.hitStatistics.addFalsyHit()
-      }
-      if (item.value === undefined || item.value === null || item.value === '') {
-        this.hitStatistics.addEmptyHit()
+        // Empty values are a subset of falsy values
+        if (item.value === undefined || item.value === null || item.value === '') {
+          this.hitStatistics.addEmptyHit()
+        }
       }
       this.hitStatistics.addHit()
       return item.value
